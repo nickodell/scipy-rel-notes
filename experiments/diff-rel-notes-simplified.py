@@ -104,8 +104,7 @@ def link_fixup(soup):
     """Resolve relative links"""
     base_address = 'https://scipy.github.io/devdocs/release/foo.html'
     for tag in soup.findAll("a"):
-        if 'href' in tag:
-            tag['href'] = urljoin(base_address, tag['href'])
+        tag['href'] = urljoin(base_address, tag['href'])
     return soup
 
 
