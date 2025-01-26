@@ -47,7 +47,7 @@ def remove_permalinks(soup):
 
     Removes all links with a text of '#'. Removes text of link
     as well."""
-    for tag in soup.findAll("a"):
+    for tag in soup.find_all("a"):
         if tag.text == '#':
             tag.decompose()
     return soup
@@ -58,7 +58,7 @@ def delink_internal_links(soup):
 
     Does not remove the contents of the link, because that sometimes
     makes the text make no sense."""
-    for tag in soup.findAll("a"):
+    for tag in soup.find_all("a"):
         if tag.get('href').startswith('#'):
             tag.replace_with_children()
     return soup
@@ -67,7 +67,7 @@ def delink_internal_links(soup):
 def link_fixup(soup):
     """Resolve relative links"""
     global base_address
-    for tag in soup.findAll("a"):
+    for tag in soup.find_all("a"):
         tag['href'] = urljoin(base_address, tag['href'])
     return soup
 
