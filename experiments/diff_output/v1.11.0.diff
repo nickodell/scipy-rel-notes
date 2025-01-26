@@ -1,0 +1,848 @@
+1,2c1
+< SciPy 1.11.0 Release Notes
+< ==========================
+---
+> # SciPy 1.11.0 Release Notes
+4c3
+< SciPy `1.11.0` is the culmination of 6 months of hard work. It contains
+---
+> SciPy 1.11.0 is the culmination of 6 months of hard work. It contains
+11c10
+< run your code with ``python -Wd`` and check for ``DeprecationWarning`` s).
+---
+> run your code with `python -Wd` and check for `DeprecationWarning` s).
+13a13,14
+> This release requires Python 3.9+ and NumPy 1.21.6 or greater.
+> For running on PyPy, PyPy3 6.0+ is required.
+15c16
+< This release requires Python `3.9+` and NumPy `1.21.6` or greater.
+---
+> ## Highlights of this release
+17c18,27
+< For running on PyPy, PyPy3 `6.0+` is required.
+---
+> -   Several [`scipy.sparse`](../reference/sparse.html#module-scipy.sparse) array API improvements, including sparse.sparray, a new
+>     public base class distinct from the older sparse.spmatrix class,
+>     proper 64-bit index support, and numerous deprecations paving the way to a
+>     modern sparse array experience.
+> -   [`scipy.stats`](../reference/stats.html#module-scipy.stats) added tools for survival analysis, multiple hypothesis testing,
+>     sensitivity analysis, and working with censored data.
+> -   A new function was added for quasi-Monte Carlo integration, and linear
+>     algebra functions `det` and `lu` now accept nD-arrays.
+> -   An `axes` argument was added broadly to `ndimage` functions, facilitating
+>     analysis of stacked image data.
+18a29
+> ## New features
+19a31
+> ### [`scipy.integrate`](../reference/integrate.html#module-scipy.integrate) improvements
+21,22c33,36
+< Highlights of this release
+< ====================
+---
+> -   Added [`scipy.integrate.qmc_quad`](../reference/generated/scipy.integrate.qmc_quad.html#scipy.integrate.qmc_quad) for quasi-Monte Carlo integration.
+> -   For an even number of points, [`scipy.integrate.simpson`](../reference/generated/scipy.integrate.simpson.html#scipy.integrate.simpson) now calculates
+>     a parabolic segment over the last three points which gives improved
+>     accuracy over the previous implementation.
+24,33c38
+< - Several `scipy.sparse` array API improvements, including `sparse.sparray`, a new
+<   public base class distinct from the older `sparse.spmatrix` class,
+<   proper 64-bit index support, and numerous deprecations paving the way to a
+<   modern sparse array experience.
+< - `scipy.stats` added tools for survival analysis, multiple hypothesis testing,
+<   sensitivity analysis, and working with censored data.
+< - A new function was added for quasi-Monte Carlo integration, and linear
+<   algebra functions ``det`` and ``lu`` now accept nD-arrays.
+< - An ``axes`` argument was added broadly to ``ndimage`` functions, facilitating
+<   analysis of stacked image data.
+---
+> ### [`scipy.cluster`](../reference/cluster.html#module-scipy.cluster) improvements
+34a40,41
+> -   `disjoint_set` has a new method `subset_size` for providing the size
+>     of a particular subset.
+36,37c43
+< New features
+< ===========
+---
+> ### [`scipy.constants`](../reference/constants.html#module-scipy.constants) improvements
+39,44c45
+< `scipy.integrate` improvements
+< ==============================
+< - Added `scipy.integrate.qmc_quad` for quasi-Monte Carlo integration.
+< - For an even number of points, `scipy.integrate.simpson` now calculates
+<   a parabolic segment over the last three points which gives improved
+<   accuracy over the previous implementation.
+---
+> -   The `quetta`, `ronna`, `ronto`, and `quecto` SI prefixes were added.
+46,49c47
+< `scipy.cluster` improvements
+< ============================
+< - ``disjoint_set`` has a new method ``subset_size`` for providing the size
+<   of a particular subset.
+---
+> ### [`scipy.linalg`](../reference/linalg.html#module-scipy.linalg) improvements
+50a49,52
+> -   [`scipy.linalg.det`](../reference/generated/scipy.linalg.det.html#scipy.linalg.det) is improved and now accepts nD-arrays.
+> -   [`scipy.linalg.lu`](../reference/generated/scipy.linalg.lu.html#scipy.linalg.lu) is improved and now accepts nD-arrays. With the new
+>     `p_indices` switch the output permutation argument can be 1D `(n,)`
+>     permutation index instead of the full `(n, n)` array.
+52,54c54
+< `scipy.constants` improvements
+< ================================
+< - The ``quetta``, ``ronna``, ``ronto``, and ``quecto`` SI prefixes were added.
+---
+> ### [`scipy.ndimage`](../reference/ndimage.html#module-scipy.ndimage) improvements
+55a56,59
+> -   `axes` argument was added to `rank_filter`, `percentile_filter`,
+>     `median_filter`, `uniform_filter`, `minimum_filter`,
+>     `maximum_filter`, and `gaussian_filter`, which can be useful for
+>     processing stacks of image data.
+57,62c61
+< `scipy.linalg` improvements
+< ===========================
+< - `scipy.linalg.det` is improved and now accepts nD-arrays.
+< - `scipy.linalg.lu` is improved and now accepts nD-arrays. With the new
+<   ``p_indices`` switch the output permutation argument can be 1D ``(n,)``
+<   permutation index instead of the full ``(n, n)`` array.
+---
+> ### [`scipy.optimize`](../reference/optimize.html#module-scipy.optimize) improvements
+63a63,83
+> -   [`scipy.optimize.linprog`](../reference/generated/scipy.optimize.linprog.html#scipy.optimize.linprog) now passes unrecognized options directly to HiGHS.
+> -   [`scipy.optimize.root_scalar`](../reference/generated/scipy.optimize.root_scalar.html#scipy.optimize.root_scalar) now uses Newton's method to be used without
+>     providing `fprime` and the `secant` method to be used without a second
+>     guess.
+> -   [`scipy.optimize.lsq_linear`](../reference/generated/scipy.optimize.lsq_linear.html#scipy.optimize.lsq_linear) now accepts `bounds` arguments of type
+>     [`scipy.optimize.Bounds`](../reference/generated/scipy.optimize.Bounds.html#scipy.optimize.Bounds).
+> -   [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) `method='cobyla'` now supports simple bound
+>     constraints.
+> -   Users can opt into a new callback interface for most methods of
+>     [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize): If the provided callback callable accepts
+>     a single keyword argument, `intermediate_result`, [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize)
+>     now passes both the current solution and the optimal value of the objective
+>     function to the callback as an instance of [`scipy.optimize.OptimizeResult`](../reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult).
+>     It also allows the user to terminate optimization by raising a
+>     `StopIteration` exception from the callback function.
+>     [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) will return normally, and the latest solution
+>     information is provided in the result object.
+> -   [`scipy.optimize.curve_fit`](../reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit) now supports an optional `nan_policy` argument.
+> -   [`scipy.optimize.shgo`](../reference/generated/scipy.optimize.shgo.html#scipy.optimize.shgo) now has parallelization with the `workers` argument,
+>     symmetry arguments that can improve performance, class-based design to
+>     improve usability, and generally improved performance.
+65,70c85
+< `scipy.ndimage` improvements
+< ============================
+< - ``axes`` argument was added to ``rank_filter``, ``percentile_filter``,
+<   ``median_filter``, ``uniform_filter``, ``minimum_filter``,
+<   ``maximum_filter``, and ``gaussian_filter``, which can be useful for
+<   processing stacks of image data.
+---
+> ### [`scipy.signal`](../reference/signal.html#module-scipy.signal) improvements
+71a87
+> -   `istft` has an improved warning message when the NOLA condition fails.
+73,95c89
+< `scipy.optimize` improvements
+< =============================
+< - `scipy.optimize.linprog` now passes unrecognized options directly to HiGHS.
+< - `scipy.optimize.root_scalar` now uses Newton's method to be used without
+<   providing ``fprime`` and the ``secant`` method to be used without a second
+<   guess.
+< - `scipy.optimize.lsq_linear` now accepts ``bounds`` arguments of type
+<   `scipy.optimize.Bounds`.
+< - `scipy.optimize.minimize` ``method='cobyla'`` now supports simple bound
+<   constraints.
+< - Users can opt into a new callback interface for most methods of
+<   `scipy.optimize.minimize`: If the provided callback callable accepts
+<   a single keyword argument, ``intermediate_result``, `scipy.optimize.minimize`
+<   now passes both the current solution and the optimal value of the objective
+<   function to the callback as an instance of `scipy.optimize.OptimizeResult`.
+<   It also allows the user to terminate optimization by raising a
+<   ``StopIteration`` exception from the callback function.
+<   `scipy.optimize.minimize` will return normally, and the latest solution
+<   information is provided in the result object.
+< - `scipy.optimize.curve_fit` now supports an optional ``nan_policy`` argument.
+< - `scipy.optimize.shgo` now has parallelization with the ``workers`` argument,
+<   symmetry arguments that can improve performance, class-based design to
+<   improve usability, and generally improved performance.
+---
+> ### [`scipy.sparse`](../reference/sparse.html#module-scipy.sparse) improvements
+96a91,104
+> -   A new public base class [`scipy.sparse.sparray`](../reference/generated/scipy.sparse.sparray.html#scipy.sparse.sparray) was introduced, allowing further
+>     extension of the sparse array API (such as the support for 1-dimensional
+>     sparse arrays) without breaking backwards compatibility.
+>     `isinstance(x, scipy.sparse.sparray)` to select the new sparse array classes,
+>     while `isinstance(x, scipy.sparse.spmatrix)` selects only the old sparse
+>     matrix classes.
+> -   Division of sparse arrays by a dense array now returns sparse arrays.
+> -   [`scipy.sparse.isspmatrix`](../reference/generated/scipy.sparse.isspmatrix.html#scipy.sparse.isspmatrix) now only returns True for the sparse matrices instances.
+>     [`scipy.sparse.issparse`](../reference/generated/scipy.sparse.issparse.html#scipy.sparse.issparse) now has to be used instead to check for instances of sparse
+>     arrays or instances of sparse matrices.
+> -   Sparse arrays constructed with int64 indices will no longer automatically
+>     downcast to int32.
+> -   The `argmin` and `argmax` methods now return the correct result when explicit
+>     zeros are present.
+98,100c106
+< `scipy.signal` improvements
+< ===========================
+< - ``istft`` has an improved warning message when the NOLA condition fails.
+---
+> ### [`scipy.sparse.linalg`](../reference/sparse.linalg.html#module-scipy.sparse.linalg) improvements
+102,117c108,112
+< `scipy.sparse` improvements
+< ===========================
+< - A new public base class `scipy.sparse.sparray` was introduced, allowing further
+<   extension of the sparse array API (such as the support for 1-dimensional
+<   sparse arrays) without breaking backwards compatibility.
+<   `isinstance(x, scipy.sparse.sparray)` to select the new sparse array classes,
+<   while `isinstance(x, scipy.sparse.spmatrix)` selects only the old sparse
+<   matrix classes.
+< - Division of sparse arrays by a dense array now returns sparse arrays.
+< - `scipy.sparse.isspmatrix` now only returns `True` for the sparse matrices instances.
+<   `scipy.sparse.issparse` now has to be used instead to check for instances of sparse
+<   arrays or instances of sparse matrices.
+< - Sparse arrays constructed with int64 indices will no longer automatically
+<   downcast to int32.
+< - The ``argmin`` and ``argmax`` methods now return the correct result when explicit
+<   zeros are present.
+---
+> -   dividing `LinearOperator` by a number now returns a
+>     `_ScaledLinearOperator`
+> -   `LinearOperator` now supports right multiplication by arrays
+> -   `lobpcg` should be more efficient following removal of an extraneous
+>     QR decomposition.
+119,125c114
+< `scipy.sparse.linalg` improvements
+< ==================================
+< - dividing ``LinearOperator`` by a number now returns a
+<   ``_ScaledLinearOperator``
+< - ``LinearOperator`` now supports right multiplication by arrays
+< - ``lobpcg`` should be more efficient following removal of an extraneous
+<   QR decomposition.
+---
+> ### [`scipy.spatial`](../reference/spatial.html#module-scipy.spatial) improvements
+126a116,119
+> -   Usage of new C++ backend for additional distance metrics, the majority of
+>     which will see substantial performance improvements, though a few minor
+>     regressions are known. These are focused on distances between boolean
+>     arrays.
+128,133c121
+< `scipy.spatial` improvements
+< ============================
+< - Usage of new C++ backend for additional distance metrics, the majority of
+<   which will see substantial performance improvements, though a few minor
+<   regressions are known. These are focused on distances between boolean
+<   arrays.
+---
+> ### [`scipy.special`](../reference/special.html#module-scipy.special) improvements
+134a123,126
+> -   The factorial functions `factorial`, `factorial2` and `factorialk`
+>     were made consistent in their behavior (in terms of dimensionality,
+>     errors etc.). Additionally, `factorial2` can now handle arrays with
+>     `exact=True`, and `factorialk` can handle arrays.
+136,141c128
+< `scipy.special` improvements
+< ============================
+< - The factorial functions ``factorial``, ``factorial2`` and ``factorialk``
+<   were made consistent in their behavior (in terms of dimensionality,
+<   errors etc.). Additionally, ``factorial2`` can now handle arrays with
+<   ``exact=True``, and ``factorialk`` can handle arrays.
+---
+> ### [`scipy.stats`](../reference/stats.html#module-scipy.stats) improvements
+142a130
+> #### New Features
+144,145c132,152
+< `scipy.stats` improvements
+< ==========================
+---
+> -   [`scipy.stats.sobol_indices`](../reference/generated/scipy.stats.sobol_indices.html#scipy.stats.sobol_indices), a method to compute Sobol' sensitivity indices.
+> -   [`scipy.stats.dunnett`](../reference/generated/scipy.stats.dunnett.html#scipy.stats.dunnett), which performs Dunnett's test of the means of multiple
+>     experimental groups against the mean of a control group.
+> -   [`scipy.stats.ecdf`](../reference/generated/scipy.stats.ecdf.html#scipy.stats.ecdf) for computing the empirical CDF and complementary
+>     CDF (survival function / SF) from uncensored or right-censored data. This
+>     function is also useful for survival analysis / Kaplan-Meier estimation.
+> -   [`scipy.stats.logrank`](../reference/generated/scipy.stats.logrank.html#scipy.stats.logrank) to compare survival functions underlying samples.
+> -   [`scipy.stats.false_discovery_control`](../reference/generated/scipy.stats.false_discovery_control.html#scipy.stats.false_discovery_control) for adjusting p-values to control the
+>     false discovery rate of multiple hypothesis tests using the
+>     Benjamini-Hochberg or Benjamini-Yekutieli procedures.
+> -   [`scipy.stats.CensoredData`](../reference/generated/scipy.stats.CensoredData.html#scipy.stats.CensoredData) to represent censored data. It can be used as
+>     input to the `fit` method of univariate distributions and to the new
+>     `ecdf` function.
+> -   Filliben's goodness of fit test as `method='Filliben'` of
+>     [`scipy.stats.goodness_of_fit`](../reference/generated/scipy.stats.goodness_of_fit.html#scipy.stats.goodness_of_fit).
+> -   [`scipy.stats.ttest_ind`](../reference/generated/scipy.stats.ttest_ind.html#scipy.stats.ttest_ind) has a new method, `confidence_interval` for
+>     computing a confidence interval of the difference between means.
+> -   [`scipy.stats.MonteCarloMethod`](../reference/generated/scipy.stats.MonteCarloMethod.html#scipy.stats.MonteCarloMethod), [`scipy.stats.PermutationMethod`](../reference/generated/scipy.stats.PermutationMethod.html#scipy.stats.PermutationMethod), and
+>     [`scipy.stats.BootstrapMethod`](../reference/generated/scipy.stats.BootstrapMethod.html#scipy.stats.BootstrapMethod) are new classes to configure resampling and/or
+>     Monte Carlo versions of hypothesis tests. They can currently be used with
+>     [`scipy.stats.pearsonr`](../reference/generated/scipy.stats.pearsonr.html#scipy.stats.pearsonr).
+147,169c154
+< New Features
+< ------------
+< - `scipy.stats.sobol_indices`, a method to compute Sobol' sensitivity indices.
+< - `scipy.stats.dunnett`, which performs Dunnett's test of the means of multiple
+<   experimental groups against the mean of a control group.
+< - `scipy.stats.ecdf` for computing the empirical CDF and complementary
+<   CDF (survival function / SF) from uncensored or right-censored data. This
+<   function is also useful for survival analysis / Kaplan-Meier estimation.
+< - `scipy.stats.logrank` to compare survival functions underlying samples.
+< - `scipy.stats.false_discovery_control` for adjusting p-values to control the
+<   false discovery rate of multiple hypothesis tests using the
+<   Benjamini-Hochberg or Benjamini-Yekutieli procedures.
+< - `scipy.stats.CensoredData` to represent censored data. It can be used as
+<   input to the ``fit`` method of univariate distributions and to the new
+<   ``ecdf`` function.
+< - Filliben's goodness of fit test as ``method='Filliben'`` of
+<   `scipy.stats.goodness_of_fit`.
+< - `scipy.stats.ttest_ind` has a new method, ``confidence_interval`` for
+<   computing a confidence interval of the difference between means.
+< - `scipy.stats.MonteCarloMethod`, `scipy.stats.PermutationMethod`, and
+<   `scipy.stats.BootstrapMethod` are new classes to configure resampling and/or
+<   Monte Carlo versions of hypothesis tests. They can currently be used with
+<   `scipy.stats.pearsonr`.
+---
+> #### Statistical Distributions
+171,182c156,208
+< Statistical Distributions
+< -------------------------
+< - Added the von-Mises Fisher distribution as `scipy.stats.vonmises_fisher`.
+<   This distribution is the most common analogue of the normal distribution
+<   on the unit sphere.
+< - Added the relativistic Breit-Wigner distribution as
+<   `scipy.stats.rel_breitwigner`.
+<   It is used in high energy physics to model resonances.
+< - Added the Dirichlet multinomial distribution as
+<   `scipy.stats.dirichlet_multinomial`.
+< - Improved the speed and precision of several univariate statistical
+<   distributions.
+---
+> -   Added the von-Mises Fisher distribution as [`scipy.stats.vonmises_fisher`](../reference/generated/scipy.stats.vonmises_fisher.html#scipy.stats.vonmises_fisher).
+>     This distribution is the most common analogue of the normal distribution
+>     on the unit sphere.
+> -   Added the relativistic Breit-Wigner distribution as
+>     [`scipy.stats.rel_breitwigner`](../reference/generated/scipy.stats.rel_breitwigner.html#scipy.stats.rel_breitwigner).
+>     It is used in high energy physics to model resonances.
+> -   Added the Dirichlet multinomial distribution as
+>     [`scipy.stats.dirichlet_multinomial`](../reference/generated/scipy.stats.dirichlet_multinomial.html#scipy.stats.dirichlet_multinomial).
+> -   Improved the speed and precision of several univariate statistical
+>     distributions.
+>     -   [`scipy.stats.anglit`](../reference/generated/scipy.stats.anglit.html#scipy.stats.anglit) `sf`
+>     -   [`scipy.stats.beta`](../reference/generated/scipy.stats.beta.html#scipy.stats.beta) `entropy`
+>     -   [`scipy.stats.betaprime`](../reference/generated/scipy.stats.betaprime.html#scipy.stats.betaprime) `cdf`, `sf`, `ppf`
+>     -   [`scipy.stats.chi`](../reference/generated/scipy.stats.chi.html#scipy.stats.chi) `entropy`
+>     -   [`scipy.stats.chi2`](../reference/generated/scipy.stats.chi2.html#scipy.stats.chi2) `entropy`
+>     -   [`scipy.stats.dgamma`](../reference/generated/scipy.stats.dgamma.html#scipy.stats.dgamma) `entropy`, `cdf`, `sf`, `ppf`, and `isf`
+>     -   [`scipy.stats.dweibull`](../reference/generated/scipy.stats.dweibull.html#scipy.stats.dweibull) `entropy`, `sf`, and `isf`
+>     -   [`scipy.stats.exponweib`](../reference/generated/scipy.stats.exponweib.html#scipy.stats.exponweib) `sf` and `isf`
+>     -   [`scipy.stats.f`](../reference/generated/scipy.stats.f.html#scipy.stats.f) `entropy`
+>     -   [`scipy.stats.foldcauchy`](../reference/generated/scipy.stats.foldcauchy.html#scipy.stats.foldcauchy) `sf`
+>     -   [`scipy.stats.foldnorm`](../reference/generated/scipy.stats.foldnorm.html#scipy.stats.foldnorm) `cdf` and `sf`
+>     -   [`scipy.stats.gamma`](../reference/generated/scipy.stats.gamma.html#scipy.stats.gamma) `entropy`
+>     -   [`scipy.stats.genexpon`](../reference/generated/scipy.stats.genexpon.html#scipy.stats.genexpon) `ppf`, `isf`, `rvs`
+>     -   [`scipy.stats.gengamma`](../reference/generated/scipy.stats.gengamma.html#scipy.stats.gengamma) `entropy`
+>     -   [`scipy.stats.geom`](../reference/generated/scipy.stats.geom.html#scipy.stats.geom) `entropy`
+>     -   [`scipy.stats.genlogistic`](../reference/generated/scipy.stats.genlogistic.html#scipy.stats.genlogistic) `entropy`, `logcdf`, `sf`, `ppf`,
+>         and `isf`
+>     -   [`scipy.stats.genhyperbolic`](../reference/generated/scipy.stats.genhyperbolic.html#scipy.stats.genhyperbolic) `cdf` and `sf`
+>     -   [`scipy.stats.gibrat`](../reference/generated/scipy.stats.gibrat.html#scipy.stats.gibrat) `sf` and `isf`
+>     -   [`scipy.stats.gompertz`](../reference/generated/scipy.stats.gompertz.html#scipy.stats.gompertz) `entropy`, `sf`. and `isf`
+>     -   [`scipy.stats.halflogistic`](../reference/generated/scipy.stats.halflogistic.html#scipy.stats.halflogistic) `sf`, and `isf`
+>     -   [`scipy.stats.halfcauchy`](../reference/generated/scipy.stats.halfcauchy.html#scipy.stats.halfcauchy) `sf` and `isf`
+>     -   [`scipy.stats.halfnorm`](../reference/generated/scipy.stats.halfnorm.html#scipy.stats.halfnorm) `cdf`, `sf`, and `isf`
+>     -   [`scipy.stats.invgamma`](../reference/generated/scipy.stats.invgamma.html#scipy.stats.invgamma) `entropy`
+>     -   [`scipy.stats.invgauss`](../reference/generated/scipy.stats.invgauss.html#scipy.stats.invgauss) `entropy`
+>     -   [`scipy.stats.johnsonsb`](../reference/generated/scipy.stats.johnsonsb.html#scipy.stats.johnsonsb) `pdf`, `cdf`, `sf`, `ppf`, and `isf`
+>     -   [`scipy.stats.johnsonsu`](../reference/generated/scipy.stats.johnsonsu.html#scipy.stats.johnsonsu) `pdf`, `sf`, `isf`, and `stats`
+>     -   [`scipy.stats.lognorm`](../reference/generated/scipy.stats.lognorm.html#scipy.stats.lognorm) `fit`
+>     -   [`scipy.stats.loguniform`](../reference/generated/scipy.stats.loguniform.html#scipy.stats.loguniform) `entropy`, `logpdf`, `pdf`, `cdf`, `ppf`,
+>         and `stats`
+>     -   [`scipy.stats.maxwell`](../reference/generated/scipy.stats.maxwell.html#scipy.stats.maxwell) `sf` and `isf`
+>     -   [`scipy.stats.nakagami`](../reference/generated/scipy.stats.nakagami.html#scipy.stats.nakagami) `entropy`
+>     -   [`scipy.stats.powerlaw`](../reference/generated/scipy.stats.powerlaw.html#scipy.stats.powerlaw) `sf`
+>     -   [`scipy.stats.powerlognorm`](../reference/generated/scipy.stats.powerlognorm.html#scipy.stats.powerlognorm) `logpdf`, `logsf`, `sf`, and `isf`
+>     -   [`scipy.stats.powernorm`](../reference/generated/scipy.stats.powernorm.html#scipy.stats.powernorm) `sf` and `isf`
+>     -   [`scipy.stats.t`](../reference/generated/scipy.stats.t.html#scipy.stats.t) `entropy`, `logpdf`, and `pdf`
+>     -   [`scipy.stats.truncexpon`](../reference/generated/scipy.stats.truncexpon.html#scipy.stats.truncexpon) `sf`, and `isf`
+>     -   [`scipy.stats.truncnorm`](../reference/generated/scipy.stats.truncnorm.html#scipy.stats.truncnorm) `entropy`
+>     -   [`scipy.stats.truncpareto`](../reference/generated/scipy.stats.truncpareto.html#scipy.stats.truncpareto) `fit`
+>     -   [`scipy.stats.vonmises`](../reference/generated/scipy.stats.vonmises.html#scipy.stats.vonmises) `fit`
+> -   [`scipy.stats.multivariate_t`](../reference/generated/scipy.stats.multivariate_t.html#scipy.stats.multivariate_t) now has `cdf` and `entropy` methods.
+> -   [`scipy.stats.multivariate_normal`](../reference/generated/scipy.stats.multivariate_normal.html#scipy.stats.multivariate_normal), [`scipy.stats.matrix_normal`](../reference/generated/scipy.stats.matrix_normal.html#scipy.stats.matrix_normal), and
+>     [`scipy.stats.invwishart`](../reference/generated/scipy.stats.invwishart.html#scipy.stats.invwishart) now have an `entropy` method.
+184,223c210
+<   - `scipy.stats.anglit` ``sf``
+<   - `scipy.stats.beta` ``entropy``
+<   - `scipy.stats.betaprime` ``cdf``, ``sf``, ``ppf``
+<   - `scipy.stats.chi` ``entropy``
+<   - `scipy.stats.chi2` ``entropy``
+<   - `scipy.stats.dgamma` ``entropy``, ``cdf``, ``sf``, ``ppf``, and ``isf``
+<   - `scipy.stats.dweibull` ``entropy``, ``sf``, and ``isf``
+<   - `scipy.stats.exponweib` ``sf`` and ``isf``
+<   - `scipy.stats.f` ``entropy``
+<   - `scipy.stats.foldcauchy` ``sf``
+<   - `scipy.stats.foldnorm` ``cdf`` and ``sf``
+<   - `scipy.stats.gamma` ``entropy``
+<   - `scipy.stats.genexpon` ``ppf``, ``isf``, ``rvs``
+<   - `scipy.stats.gengamma` ``entropy``
+<   - `scipy.stats.geom` ``entropy``
+<   - `scipy.stats.genlogistic` ``entropy``, ``logcdf``, ``sf``, ``ppf``,
+<     and ``isf``
+<   - `scipy.stats.genhyperbolic` ``cdf`` and ``sf``
+<   - `scipy.stats.gibrat` ``sf`` and ``isf``
+<   - `scipy.stats.gompertz` ``entropy``, ``sf``. and ``isf``
+<   - `scipy.stats.halflogistic` ``sf``, and ``isf``
+<   - `scipy.stats.halfcauchy` ``sf`` and ``isf``
+<   - `scipy.stats.halfnorm` ``cdf``, ``sf``, and ``isf``
+<   - `scipy.stats.invgamma` ``entropy``
+<   - `scipy.stats.invgauss` ``entropy``
+<   - `scipy.stats.johnsonsb` ``pdf``, ``cdf``, ``sf``, ``ppf``, and ``isf``
+<   - `scipy.stats.johnsonsu` ``pdf``, ``sf``, ``isf``, and ``stats``
+<   - `scipy.stats.lognorm` ``fit``
+<   - `scipy.stats.loguniform` ``entropy``, ``logpdf``, ``pdf``, ``cdf``, ``ppf``,
+<     and ``stats``
+<   - `scipy.stats.maxwell` ``sf`` and ``isf``
+<   - `scipy.stats.nakagami` ``entropy``
+<   - `scipy.stats.powerlaw` ``sf``
+<   - `scipy.stats.powerlognorm` ``logpdf``, ``logsf``, ``sf``, and ``isf``
+<   - `scipy.stats.powernorm` ``sf`` and ``isf``
+<   - `scipy.stats.t` ``entropy``, ``logpdf``, and ``pdf``
+<   - `scipy.stats.truncexpon` ``sf``, and ``isf``
+<   - `scipy.stats.truncnorm` ``entropy``
+<   - `scipy.stats.truncpareto` ``fit``
+<   - `scipy.stats.vonmises` ``fit``
+---
+> #### Other Improvements
+225,227c212,219
+< - `scipy.stats.multivariate_t` now has ``cdf`` and ``entropy`` methods.
+< - `scipy.stats.multivariate_normal`, `scipy.stats.matrix_normal`, and
+<   `scipy.stats.invwishart` now have an ``entropy`` method.
+---
+> -   [`scipy.stats.monte_carlo_test`](../reference/generated/scipy.stats.monte_carlo_test.html#scipy.stats.monte_carlo_test) now supports multi-sample statistics.
+> -   [`scipy.stats.bootstrap`](../reference/generated/scipy.stats.bootstrap.html#scipy.stats.bootstrap) can now produce one-sided confidence intervals.
+> -   [`scipy.stats.rankdata`](../reference/generated/scipy.stats.rankdata.html#scipy.stats.rankdata) performance was improved for `method=ordinal` and
+>     `method=dense`.
+> -   [`scipy.stats.moment`](../reference/generated/scipy.stats.moment.html#scipy.stats.moment) now supports non-central moment calculation.
+> -   [`scipy.stats.anderson`](../reference/generated/scipy.stats.anderson.html#scipy.stats.anderson) now supports the `weibull_min` distribution.
+> -   [`scipy.stats.sem`](../reference/generated/scipy.stats.sem.html#scipy.stats.sem) and [`scipy.stats.iqr`](../reference/generated/scipy.stats.iqr.html#scipy.stats.iqr) now support `axis`, `nan_policy`,
+>     and masked array input.
+229,238c221
+< Other Improvements
+< ------------------
+< - `scipy.stats.monte_carlo_test` now supports multi-sample statistics.
+< - `scipy.stats.bootstrap` can now produce one-sided confidence intervals.
+< - `scipy.stats.rankdata` performance was improved for ``method=ordinal`` and
+<   ``method=dense``.
+< - `scipy.stats.moment` now supports non-central moment calculation.
+< - `scipy.stats.anderson` now supports the ``weibull_min`` distribution.
+< - `scipy.stats.sem` and `scipy.stats.iqr` now support ``axis``, ``nan_policy``,
+<   and masked array input.
+---
+> ## Deprecated features
+240,242c223,249
+< 
+< Deprecated features
+< =================
+---
+> -   Multi-Ellipsis sparse matrix indexing has been deprecated and will
+>     be removed in SciPy 1.13.
+> -   Several methods were deprecated for sparse arrays: `asfptype`, `getrow`,
+>     `getcol`, `get_shape`, `getmaxprint`, `set_shape`,
+>     `getnnz`, and `getformat`. Additionally, the `.A` and `.H`
+>     attributes were deprecated. Sparse matrix types are not affected.
+> -   The [`scipy.linalg`](../reference/linalg.html#module-scipy.linalg) functions `tri`, `triu` & `tril` are deprecated and
+>     will be removed in SciPy 1.13. Users are recommended to use the NumPy
+>     versions of these functions with identical names.
+> -   The [`scipy.signal`](../reference/signal.html#module-scipy.signal) functions `bspline`, `quadratic` & `cubic` are
+>     deprecated and will be removed in SciPy 1.13. Users are recommended to use
+>     [`scipy.interpolate.BSpline`](../reference/generated/scipy.interpolate.BSpline.html#scipy.interpolate.BSpline) instead.
+> -   The `even` keyword of [`scipy.integrate.simpson`](../reference/generated/scipy.integrate.simpson.html#scipy.integrate.simpson) is deprecated and will be
+>     removed in SciPy 1.13.0. Users should leave this as the default as this
+>     gives improved accuracy compared to the other methods.
+> -   Using `exact=True` when passing integers in a float array to `factorial`
+>     is deprecated and will be removed in SciPy 1.13.0.
+> -   float128 and object dtypes are deprecated for [`scipy.signal.medfilt`](../reference/generated/scipy.signal.medfilt.html#scipy.signal.medfilt) and
+>     [`scipy.signal.order_filter`](../reference/generated/scipy.signal.order_filter.html#scipy.signal.order_filter)
+> -   The functions `scipy.signal.{lsim2, impulse2, step2}` had long been
+>     deprecated in documentation only. They now raise a DeprecationWarning and
+>     will be removed in SciPy 1.13.0.
+> -   Importing window functions directly from scipy.window has been soft
+>     deprecated since SciPy 1.1.0. They now raise a `DeprecationWarning` and
+>     will be removed in SciPy 1.13.0. Users should instead import them from
+>     scipy.signal.window or use the convenience function
+>     [`scipy.signal.get_window`](../reference/generated/scipy.signal.get_window.html#scipy.signal.get_window).
+244,270c251
+< - Multi-Ellipsis sparse matrix indexing has been deprecated and will
+<   be removed in SciPy 1.13.
+< - Several methods were deprecated for sparse arrays: ``asfptype``, ``getrow``,
+<   ``getcol``, ``get_shape``, ``getmaxprint``, ``set_shape``,
+<   ``getnnz``, and ``getformat``. Additionally, the ``.A`` and ``.H``
+<   attributes were deprecated. Sparse matrix types are not affected.
+< - The `scipy.linalg` functions ``tri``, ``triu`` & ``tril`` are deprecated and
+<   will be removed in SciPy 1.13. Users are recommended to use the NumPy
+<   versions of these functions with identical names.
+< - The `scipy.signal` functions ``bspline``, ``quadratic`` & ``cubic`` are
+<   deprecated and will be removed in SciPy 1.13. Users are recommended to use
+<   `scipy.interpolate.BSpline` instead.
+< - The ``even`` keyword of `scipy.integrate.simpson` is deprecated and will be
+<   removed in SciPy 1.13.0. Users should leave this as the default as this
+<   gives improved accuracy compared to the other methods.
+< - Using ``exact=True`` when passing integers in a float array to ``factorial``
+<   is deprecated and will be removed in SciPy 1.13.0.
+< - float128 and object dtypes are deprecated for `scipy.signal.medfilt` and
+<   `scipy.signal.order_filter`
+< - The functions ``scipy.signal.{lsim2, impulse2, step2}`` had long been
+<   deprecated in documentation only. They now raise a DeprecationWarning and
+<   will be removed in SciPy 1.13.0.
+< - Importing window functions directly from `scipy.window` has been soft
+<   deprecated since SciPy 1.1.0. They now raise a ``DeprecationWarning`` and
+<   will be removed in SciPy 1.13.0. Users should instead import them from
+<   `scipy.signal.window` or use the convenience function
+<   `scipy.signal.get_window`.
+---
+> ## Backwards incompatible changes
+272,275c253,254
+< Backwards incompatible changes
+< ============================
+< - The default for the ``legacy`` keyword of `scipy.special.comb` has changed
+<   from ``True`` to ``False``, as announced since its introduction.
+---
+> -   The default for the `legacy` keyword of [`scipy.special.comb`](../reference/generated/scipy.special.comb.html#scipy.special.comb) has changed
+>     from `True` to `False`, as announced since its introduction.
+276a256
+> ## Expired Deprecations
+278,279d257
+< Expired Deprecations
+< ==================
+283,301c261,279
+< - The ``n`` keyword has been removed from `scipy.stats.moment`.
+< - The ``alpha`` keyword has been removed from `scipy.stats.interval`.
+< - The misspelt ``gilbrat`` distribution has been removed (use
+<   `scipy.stats.gibrat`).
+< - The deprecated spelling of the ``kulsinski`` distance metric has been
+<   removed (use `scipy.spatial.distance.kulczynski1`).
+< - The ``vertices`` keyword of `scipy.spatial.Delauney.qhull` has been removed
+<   (use simplices).
+< - The ``residual`` property of `scipy.sparse.csgraph.maximum_flow` has been
+<   removed (use ``flow``).
+< - The ``extradoc`` keyword of `scipy.stats.rv_continuous`,
+<   `scipy.stats.rv_discrete` and `scipy.stats.rv_sample` has been removed.
+< - The ``sym_pos`` keyword of `scipy.linalg.solve` has been removed.
+< - The `scipy.optimize.minimize` function now raises an error for ``x0`` with
+<   ``x0.ndim > 1``.
+< - In `scipy.stats.mode`, the default value of ``keepdims`` is now ``False``,
+<   and support for non-numeric input has been removed.
+< - The function `scipy.signal.lsim` does not support non-uniform time steps
+<   anymore.
+---
+> -   The `n` keyword has been removed from [`scipy.stats.moment`](../reference/generated/scipy.stats.moment.html#scipy.stats.moment).
+> -   The `alpha` keyword has been removed from scipy.stats.interval.
+> -   The misspelt `gilbrat` distribution has been removed (use
+>     [`scipy.stats.gibrat`](../reference/generated/scipy.stats.gibrat.html#scipy.stats.gibrat)).
+> -   The deprecated spelling of the `kulsinski` distance metric has been
+>     removed (use [`scipy.spatial.distance.kulczynski1`](../reference/generated/scipy.spatial.distance.kulczynski1.html#scipy.spatial.distance.kulczynski1)).
+> -   The `vertices` keyword of scipy.spatial.Delauney.qhull has been removed
+>     (use simplices).
+> -   The `residual` property of [`scipy.sparse.csgraph.maximum_flow`](../reference/generated/scipy.sparse.csgraph.maximum_flow.html#scipy.sparse.csgraph.maximum_flow) has been
+>     removed (use `flow`).
+> -   The `extradoc` keyword of [`scipy.stats.rv_continuous`](../reference/generated/scipy.stats.rv_continuous.html#scipy.stats.rv_continuous),
+>     [`scipy.stats.rv_discrete`](../reference/generated/scipy.stats.rv_discrete.html#scipy.stats.rv_discrete) and scipy.stats.rv_sample has been removed.
+> -   The `sym_pos` keyword of [`scipy.linalg.solve`](../reference/generated/scipy.linalg.solve.html#scipy.linalg.solve) has been removed.
+> -   The [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) function now raises an error for `x0` with
+>     `x0.ndim > 1`.
+> -   In [`scipy.stats.mode`](../reference/generated/scipy.stats.mode.html#scipy.stats.mode), the default value of `keepdims` is now `False`,
+>     and support for non-numeric input has been removed.
+> -   The function [`scipy.signal.lsim`](../reference/generated/scipy.signal.lsim.html#scipy.signal.lsim) does not support non-uniform time steps
+>     anymore.
+302a281
+> ## Other changes
+303a283,285
+> -   Rewrote the source build docs and restructured the contributor guide.
+> -   Improved support for cross-compiling with meson build system.
+> -   MyST-NB notebook infrastructure has been added to our documentation.
+305,309c287
+< Other changes
+< ============
+< - Rewrote the source build docs and restructured the contributor guide.
+< - Improved support for cross-compiling with meson build system.
+< - MyST-NB notebook infrastructure has been added to our documentation.
+---
+> ## Authors
+310a289,422
+> -   h-vetinari (69)
+> -   Oriol Abril-Pla (1) +
+> -   Tom Adamczewski (1) +
+> -   Anton Akhmerov (13)
+> -   Andrey Akinshin (1) +
+> -   alice (1) +
+> -   Oren Amsalem (1)
+> -   Ross Barnowski (13)
+> -   Christoph Baumgarten (2)
+> -   Dawson Beatty (1) +
+> -   Doron Behar (1) +
+> -   Peter Bell (1)
+> -   John Belmonte (1) +
+> -   boeleman (1) +
+> -   Jack Borchanian (1) +
+> -   Matt Borland (3) +
+> -   Jake Bowhay (41)
+> -   Larry Bradley (1) +
+> -   Sienna Brent (1) +
+> -   Matthew Brett (1)
+> -   Evgeni Burovski (39)
+> -   Matthias Bussonnier (2)
+> -   Maria Cann (1) +
+> -   Alfredo Carella (1) +
+> -   CJ Carey (34)
+> -   Hood Chatham (2)
+> -   Anirudh Dagar (3)
+> -   Alberto Defendi (1) +
+> -   Pol del Aguila (1) +
+> -   Hans Dembinski (1)
+> -   Dennis (1) +
+> -   Vinayak Dev (1) +
+> -   Thomas Duvernay (1)
+> -   DWesl (4)
+> -   Stefan Endres (66)
+> -   Evandro (1) +
+> -   Tom Eversdijk (2) +
+> -   Isuru Fernando (1)
+> -   Franz Forstmayr (4)
+> -   Joseph Fox-Rabinovitz (1)
+> -   Stefano Frazzetto (1) +
+> -   Neil Girdhar (1)
+> -   Caden Gobat (1) +
+> -   Ralf Gommers (153)
+> -   GonVas (1) +
+> -   Marco Gorelli (1)
+> -   Brett Graham (2) +
+> -   Matt Haberland (388)
+> -   harshvardhan2707 (1) +
+> -   Alex Herbert (1) +
+> -   Guillaume Horel (1)
+> -   Geert-Jan Huizing (1) +
+> -   Jakob Jakobson (2)
+> -   Julien Jerphanion (10)
+> -   jyuv (2)
+> -   Rajarshi Karmakar (1) +
+> -   Ganesh Kathiresan (3) +
+> -   Robert Kern (4)
+> -   Andrew Knyazev (4)
+> -   Sergey Koposov (1)
+> -   Rishi Kulkarni (2) +
+> -   Eric Larson (1)
+> -   Zoufiné Lauer-Bare (2) +
+> -   Antony Lee (3)
+> -   Gregory R. Lee (8)
+> -   Guillaume Lemaitre (2) +
+> -   lilinjie (2) +
+> -   Yannis Linardos (1) +
+> -   Christian Lorentzen (5)
+> -   Loïc Estève (1)
+> -   Adam Lugowski (1) +
+> -   Charlie Marsh (2) +
+> -   Boris Martin (1) +
+> -   Nicholas McKibben (11)
+> -   Melissa Weber Mendonça (58)
+> -   Michał Górny (1) +
+> -   Jarrod Millman (5)
+> -   Stefanie Molin (2) +
+> -   Mark W. Mueller (1) +
+> -   mustafacevik (1) +
+> -   Takumasa N (1) +
+> -   nboudrie (1)
+> -   Andrew Nelson (112)
+> -   Nico Schlömer (4)
+> -   Lysandros Nikolaou (2) +
+> -   Kyle Oman (1)
+> -   OmarManzoor (2) +
+> -   Simon Ott (1) +
+> -   Geoffrey Oxberry (1) +
+> -   Geoffrey M. Oxberry (2) +
+> -   Sravya papaganti (1) +
+> -   Tirth Patel (2)
+> -   Ilhan Polat (32)
+> -   Quentin Barthélemy (1)
+> -   Matteo Raso (12) +
+> -   Tyler Reddy (143)
+> -   Lucas Roberts (1)
+> -   Pamphile Roy (225)
+> -   Jordan Rupprecht (1) +
+> -   Atsushi Sakai (11)
+> -   Omar Salman (7) +
+> -   Leo Sandler (1) +
+> -   Ujjwal Sarswat (3) +
+> -   Saumya (1) +
+> -   Daniel Schmitz (79)
+> -   Henry Schreiner (2) +
+> -   Dan Schult (8) +
+> -   Eli Schwartz (6)
+> -   Tomer Sery (2) +
+> -   Scott Shambaugh (10) +
+> -   Gagandeep Singh (1)
+> -   Ethan Steinberg (6) +
+> -   stepeos (2) +
+> -   Albert Steppi (3)
+> -   Strahinja Lukić (1)
+> -   Kai Striega (4)
+> -   suen-bit (1) +
+> -   Tartopohm (2)
+> -   Logan Thomas (2) +
+> -   Jacopo Tissino (1) +
+> -   Matus Valo (12) +
+> -   Jacob Vanderplas (2)
+> -   Christian Veenhuis (1) +
+> -   Isaac Virshup (3)
+> -   Stefan van der Walt (14)
+> -   Warren Weckesser (63)
+> -   windows-server-2003 (1)
+> -   Levi John Wolf (3)
+> -   Nobel Wong (1) +
+> -   Benjamin Yeh (1) +
+> -   Rory Yorke (1)
+> -   Younes (2) +
+> -   Zaikun ZHANG (1) +
+> -   Alex Zverianskii (1) +
+312,451d423
+< 
+< 
+< Authors
+< ========
+< 
+< * h-vetinari (69)
+< * Oriol Abril-Pla (1) +
+< * Tom Adamczewski (1) +
+< * Anton Akhmerov (13)
+< * Andrey Akinshin (1) +
+< * alice (1) +
+< * Oren Amsalem (1)
+< * Ross Barnowski (13)
+< * Christoph Baumgarten (2)
+< * Dawson Beatty (1) +
+< * Doron Behar (1) +
+< * Peter Bell (1)
+< * John Belmonte (1) +
+< * boeleman (1) +
+< * Jack Borchanian (1) +
+< * Matt Borland (3) +
+< * Jake Bowhay (41)
+< * Larry Bradley (1) +
+< * Sienna Brent (1) +
+< * Matthew Brett (1)
+< * Evgeni Burovski (39)
+< * Matthias Bussonnier (2)
+< * Maria Cann (1) +
+< * Alfredo Carella (1) +
+< * CJ Carey (34)
+< * Hood Chatham (2)
+< * Anirudh Dagar (3)
+< * Alberto Defendi (1) +
+< * Pol del Aguila (1) +
+< * Hans Dembinski (1)
+< * Dennis (1) +
+< * Vinayak Dev (1) +
+< * Thomas Duvernay (1)
+< * DWesl (4)
+< * Stefan Endres (66)
+< * Evandro (1) +
+< * Tom Eversdijk (2) +
+< * Isuru Fernando (1)
+< * Franz Forstmayr (4)
+< * Joseph Fox-Rabinovitz (1)
+< * Stefano Frazzetto (1) +
+< * Neil Girdhar (1)
+< * Caden Gobat (1) +
+< * Ralf Gommers (153)
+< * GonVas (1) +
+< * Marco Gorelli (1)
+< * Brett Graham (2) +
+< * Matt Haberland (388)
+< * harshvardhan2707 (1) +
+< * Alex Herbert (1) +
+< * Guillaume Horel (1)
+< * Geert-Jan Huizing (1) +
+< * Jakob Jakobson (2)
+< * Julien Jerphanion (10)
+< * jyuv (2)
+< * Rajarshi Karmakar (1) +
+< * Ganesh Kathiresan (3) +
+< * Robert Kern (4)
+< * Andrew Knyazev (4)
+< * Sergey Koposov (1)
+< * Rishi Kulkarni (2) +
+< * Eric Larson (1)
+< * Zoufiné Lauer-Bare (2) +
+< * Antony Lee (3)
+< * Gregory R. Lee (8)
+< * Guillaume Lemaitre (2) +
+< * lilinjie (2) +
+< * Yannis Linardos (1) +
+< * Christian Lorentzen (5)
+< * Loïc Estève (1)
+< * Adam Lugowski (1) +
+< * Charlie Marsh (2) +
+< * Boris Martin (1) +
+< * Nicholas McKibben (11)
+< * Melissa Weber Mendonça (58)
+< * Michał Górny (1) +
+< * Jarrod Millman (5)
+< * Stefanie Molin (2) +
+< * Mark W. Mueller (1) +
+< * mustafacevik (1) +
+< * Takumasa N (1) +
+< * nboudrie (1)
+< * Andrew Nelson (112)
+< * Nico Schlömer (4)
+< * Lysandros Nikolaou (2) +
+< * Kyle Oman (1)
+< * OmarManzoor (2) +
+< * Simon Ott (1) +
+< * Geoffrey Oxberry (1) +
+< * Geoffrey M. Oxberry (2) +
+< * Sravya papaganti (1) +
+< * Tirth Patel (2)
+< * Ilhan Polat (32)
+< * Quentin Barthélemy (1)
+< * Matteo Raso (12) +
+< * Tyler Reddy (143)
+< * Lucas Roberts (1)
+< * Pamphile Roy (225)
+< * Jordan Rupprecht (1) +
+< * Atsushi Sakai (11)
+< * Omar Salman (7) +
+< * Leo Sandler (1) +
+< * Ujjwal Sarswat (3) +
+< * Saumya (1) +
+< * Daniel Schmitz (79)
+< * Henry Schreiner (2) +
+< * Dan Schult (8) +
+< * Eli Schwartz (6)
+< * Tomer Sery (2) +
+< * Scott Shambaugh (10) +
+< * Gagandeep Singh (1)
+< * Ethan Steinberg (6) +
+< * stepeos (2) +
+< * Albert Steppi (3)
+< * Strahinja Lukić (1)
+< * Kai Striega (4)
+< * suen-bit (1) +
+< * Tartopohm (2)
+< * Logan Thomas (2) +
+< * Jacopo Tissino (1) +
+< * Matus Valo (12) +
+< * Jacob Vanderplas (2)
+< * Christian Veenhuis (1) +
+< * Isaac Virshup (3)
+< * Stefan van der Walt (14)
+< * Warren Weckesser (63)
+< * windows-server-2003 (1)
+< * Levi John Wolf (3)
+< * Nobel Wong (1) +
+< * Benjamin Yeh (1) +
+< * Rory Yorke (1)
+< * Younes (2) +
+< * Zaikun ZHANG (1) +
+< * Alex Zverianskii (1) +
+< 
+454c426,427
+< This list of names is automatically generated, and may not be fully complete.
+\ No newline at end of file
+---
+> This list of names is automatically generated, and may not be fully complete.
+> 

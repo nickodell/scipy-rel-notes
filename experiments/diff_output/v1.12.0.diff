@@ -1,0 +1,920 @@
+1,2c1
+< SciPy 1.12.0 Release Notes
+< ====================
+---
+> # SciPy 1.12.0 Release Notes
+4c3
+< SciPy `1.12.0` is the culmination of `6` months of hard work. It contains
+---
+> SciPy 1.12.0 is the culmination of 6 months of hard work. It contains
+11c10
+< run your code with ``python -Wd`` and check for ``DeprecationWarning`` s).
+---
+> run your code with `python -Wd` and check for `DeprecationWarning` s).
+13a13,14
+> This release requires Python 3.9+ and NumPy 1.22.4 or greater.
+> For running on PyPy, PyPy3 6.0+ is required.
+15c16
+< This release requires Python `3.9+` and NumPy `1.22.4` or greater.
+---
+> ## Highlights of this release
+17c18,32
+< For running on PyPy, PyPy3 `6.0+` is required.
+---
+> -   Experimental support for the array API standard has been added to part of
+>     [`scipy.special`](../reference/special.html#module-scipy.special), and to all of [`scipy.fft`](../reference/fft.html#module-scipy.fft) and [`scipy.cluster`](../reference/cluster.html#module-scipy.cluster). There are
+>     likely to be bugs and early feedback for usage with CuPy arrays, PyTorch
+>     tensors, and other array API compatible libraries is appreciated. Use the
+>     `SCIPY_ARRAY_API` environment variable for testing.
+> -   A new class, `ShortTimeFFT`, provides a more versatile implementation of the
+>     short-time Fourier transform (STFT), its inverse (ISTFT) as well as the (cross-)
+>     spectrogram. It utilizes an improved algorithm for calculating the ISTFT.
+> -   Several new constructors have been added for sparse arrays, and many operations
+>     now additionally support sparse arrays, further facilitating the migration
+>     from sparse matrices.
+> -   A large portion of the [`scipy.stats`](../reference/stats.html#module-scipy.stats) API now has improved support for handling
+>     `NaN` values, masked arrays, and more fine-grained shape-handling. The
+>     accuracy and performance of a number of `stats` methods have been improved,
+>     and a number of new statistical tests and distributions have been added.
+19,35c34
+< Highlights of this release
+< ===================
+< - Experimental support for the array API standard has been added to part of
+<   `scipy.special`, and to all of `scipy.fft` and `scipy.cluster`. There are
+<   likely to be bugs and early feedback for usage with CuPy arrays, PyTorch
+<   tensors, and other array API compatible libraries is appreciated. Use the
+<   ``SCIPY_ARRAY_API`` environment variable for testing.
+< - A new class, ``ShortTimeFFT``, provides a more versatile implementation of the
+<   short-time Fourier transform (STFT), its inverse (ISTFT) as well as the (cross-)
+<   spectrogram. It utilizes an improved algorithm for calculating the ISTFT.
+< - Several new constructors have been added for sparse arrays, and many operations
+<   now additionally support sparse arrays, further facilitating the migration
+<   from sparse matrices.
+< - A large portion of the `scipy.stats` API now has improved support for handling
+<   ``NaN`` values, masked arrays, and more fine-grained shape-handling. The
+<   accuracy and performance of a number of ``stats`` methods have been improved,
+<   and a number of new statistical tests and distributions have been added.
+---
+> ## New features
+36a36
+> ### [`scipy.cluster`](../reference/cluster.html#module-scipy.cluster) improvements
+38,39c38,45
+< New features
+< ==========
+---
+> -   Experimental support added for the array API standard; PyTorch tensors,
+>     CuPy arrays and array API compatible array libraries are now accepted
+>     (GPU support is limited to functions with pure Python implementations).
+>     CPU arrays which can be converted to and from NumPy are supported
+>     module-wide and returned arrays will match the input type.
+>     This behaviour is enabled by setting the `SCIPY_ARRAY_API` environment
+>     variable before importing `scipy`. This experimental support is still
+>     under development and likely to contain bugs - testing is very welcome.
+41,50c47
+< `scipy.cluster` improvements
+< ============================
+< - Experimental support added for the array API standard; PyTorch tensors,
+<   CuPy arrays and array API compatible array libraries are now accepted
+<   (GPU support is limited to functions with pure Python implementations).
+<   CPU arrays which can be converted to and from NumPy are supported
+<   module-wide and returned arrays will match the input type.
+<   This behaviour is enabled by setting the ``SCIPY_ARRAY_API`` environment
+<   variable before importing ``scipy``. This experimental support is still
+<   under development and likely to contain bugs - testing is very welcome.
+---
+> ### [`scipy.fft`](../reference/fft.html#module-scipy.fft) improvements
+51a49,57
+> -   Experimental support added for the array API standard; functions which are
+>     part of the `fft` array API standard extension module, as well as the
+>     Fast Hankel Transforms and the basic FFTs which are not in the extension
+>     module, now accept PyTorch tensors, CuPy arrays and array API compatible
+>     array libraries. CPU arrays which can be converted to and from NumPy arrays
+>     are supported module-wide and returned arrays will match the input type.
+>     This behaviour is enabled by setting the `SCIPY_ARRAY_API` environment
+>     variable before importing `scipy`. This experimental support is still under
+>     development and likely to contain bugs - testing is very welcome.
+53,63c59
+< `scipy.fft` improvements
+< ====================
+< - Experimental support added for the array API standard; functions which are
+<   part of the ``fft`` array API standard extension module, as well as the 
+<   Fast Hankel Transforms and the basic FFTs which are not in the extension
+<   module, now accept PyTorch tensors, CuPy arrays and array API compatible
+<   array libraries. CPU arrays which can be converted to and from NumPy arrays
+<   are supported module-wide and returned arrays will match the input type.
+<   This behaviour is enabled by setting the ``SCIPY_ARRAY_API`` environment
+<   variable before importing ``scipy``. This experimental support is still under
+<   development and likely to contain bugs - testing is very welcome.
+---
+> ### [`scipy.integrate`](../reference/integrate.html#module-scipy.integrate) improvements
+65,68c61,62
+< `scipy.integrate` improvements
+< ========================
+< - Added `scipy.integrate.cumulative_simpson` for cumulative quadrature
+<   from sampled data using Simpson's 1/3 rule.
+---
+> -   Added [`scipy.integrate.cumulative_simpson`](../reference/generated/scipy.integrate.cumulative_simpson.html#scipy.integrate.cumulative_simpson) for cumulative quadrature
+>     from sampled data using Simpson's 1/3 rule.
+70,84c64
+< `scipy.interpolate` improvements
+< =========================
+< - New class ``NdBSpline`` represents tensor-product splines in N dimensions.
+<   This class only knows how to evaluate a tensor product given coefficients
+<   and knot vectors. This way it generalizes ``BSpline`` for 1D data to N-D, and
+<   parallels ``NdPPoly`` (which represents N-D tensor product polynomials).
+<   Evaluations exploit the localized nature of b-splines.
+< - ``NearestNDInterpolator.__call__`` accepts ``**query_options``, which are
+<   passed through to the ``KDTree.query`` call to find nearest neighbors. This
+<   allows, for instance, to limit the neighbor search distance and parallelize
+<   the query using the ``workers`` keyword.
+< - ``BarycentricInterpolator`` now allows computing the derivatives.
+< - It is now possible to change interpolation values in an existing
+<   ``CloughTocher2DInterpolator`` instance, while also saving the barycentric
+<   coordinates of interpolation points.
+---
+> ### [`scipy.interpolate`](../reference/interpolate.html#module-scipy.interpolate) improvements
+86,89c66,78
+< `scipy.linalg` improvements
+< ======================
+< - Access to new low-level LAPACK functions is provided via ``dtgsyl`` and
+<   ``stgsyl``.
+---
+> -   New class `NdBSpline` represents tensor-product splines in N dimensions.
+>     This class only knows how to evaluate a tensor product given coefficients
+>     and knot vectors. This way it generalizes `BSpline` for 1D data to N-D, and
+>     parallels `NdPPoly` (which represents N-D tensor product polynomials).
+>     Evaluations exploit the localized nature of b-splines.
+> -   `NearestNDInterpolator.__call__` accepts `**query_options`, which are
+>     passed through to the `KDTree.query` call to find nearest neighbors. This
+>     allows, for instance, to limit the neighbor search distance and parallelize
+>     the query using the `workers` keyword.
+> -   `BarycentricInterpolator` now allows computing the derivatives.
+> -   It is now possible to change interpolation values in an existing
+>     `CloughTocher2DInterpolator` instance, while also saving the barycentric
+>     coordinates of interpolation points.
+91,114c80
+< `scipy.optimize` improvements
+< ========================
+< - `scipy.optimize.isotonic_regression` has been added to allow nonparametric isotonic
+<   regression.
+< - `scipy.optimize.nnls` is rewritten in Python and now implements the so-called
+<   fnnls or fast nnls, making it more efficient for high-dimensional problems.
+< - The result object of `scipy.optimize.root` and `scipy.optimize.root_scalar`
+<   now reports the method used.
+< - The ``callback`` method of `scipy.optimize.differential_evolution` can now be
+<   passed more detailed information via the ``intermediate_results`` keyword
+<   parameter. Also, the evolution ``strategy`` now accepts a callable for
+<   additional customization. The performance of ``differential_evolution`` has
+<   also been improved.
+< - `scipy.optimize.minimize` method ``Newton-CG`` now supports functions that
+<   return sparse Hessian matrices/arrays for the ``hess`` parameter and is slightly
+<   more efficient.
+< - `scipy.optimize.minimize` method ``BFGS`` now accepts an initial estimate for the
+<   inverse of the Hessian, which allows for more efficient workflows in some
+<   circumstances. The new parameter is ``hess_inv0``.
+< - `scipy.optimize.minimize` methods ``CG``, ``Newton-CG``, and ``BFGS`` now accept
+<   parameters ``c1`` and ``c2``, allowing specification of the Armijo and curvature rule
+<   parameters, respectively.
+< - `scipy.optimize.curve_fit` performance has improved due to more efficient memoization
+<   of the callable function.
+---
+> ### [`scipy.linalg`](../reference/linalg.html#module-scipy.linalg) improvements
+116,127c82,83
+< `scipy.signal` improvements
+< ======================
+< - ``freqz``, ``freqz_zpk``, and ``group_delay`` are now more accurate
+<   when ``fs`` has a default value.
+< - The new class ``ShortTimeFFT`` provides a more versatile implementation of the
+<   short-time Fourier transform (STFT), its inverse (ISTFT) as well as the (cross-)
+<   spectrogram. It utilizes an improved algorithm for calculating the ISTFT based on
+<   dual windows and provides more fine-grained control of the parametrization especially
+<   in regard to scaling and phase-shift. Functionality was implemented to ease
+<   working with signal and STFT chunks. A section has been added to the "SciPy User Guide"
+<   providing algorithmic details. The functions ``stft``, ``istft`` and ``spectrogram``
+<   have been marked as legacy.
+---
+> -   Access to new low-level LAPACK functions is provided via `dtgsyl` and
+>     `stgsyl`.
+129,149c85
+< `scipy.sparse` improvements
+< ======================
+< - ``sparse.linalg`` iterative solvers ``sparse.linalg.cg``,
+<   ``sparse.linalg.cgs``, ``sparse.linalg.bicg``, ``sparse.linalg.bicgstab``,
+<   ``sparse.linalg.gmres``, and ``sparse.linalg.qmr`` are rewritten in Python.
+< - Updated vendored SuperLU version to ``6.0.1``, along with a few additional
+<   fixes.
+< - Sparse arrays have gained additional constructors: ``eye_array``,
+<   ``random_array``, ``block_array``, and ``identity``. ``kron`` and ``kronsum``
+<   have been adjusted to additionally support operation on sparse arrays.
+< - Sparse matrices now support a transpose with ``axes=(1, 0)``, to mirror
+<   the ``.T``  method.
+< - ``LaplacianNd`` now allows selection of the largest subset of eigenvalues,
+<   and additionally now supports retrieval of the corresponding eigenvectors.
+<   The performance of ``LaplacianNd`` has also been improved.
+< - The performance of ``dok_matrix`` and ``dok_array`` has been improved,
+<   and their inheritance behavior should be more robust.
+< - ``hstack``, ``vstack``, and ``block_diag`` now work with sparse arrays, and
+<   preserve the input sparse type.
+< - A new function, `scipy.sparse.linalg.matrix_power`, has been added, allowing
+<   for exponentiation of sparse arrays.
+---
+> ### [`scipy.ndimage`](../reference/ndimage.html#module-scipy.ndimage) improvements
+150a87
+> ### [`scipy.optimize`](../reference/optimize.html#module-scipy.optimize) improvements
+152,167c89,110
+< `scipy.spatial` improvements
+< ======================
+< - Two new methods were implemented for ``spatial.transform.Rotation``:
+<   ``__pow__`` to raise a rotation to integer or fractional power and
+<   ``approx_equal`` to check if two rotations are approximately equal.
+< - The method ``Rotation.align_vectors`` was extended to solve a constrained
+<   alignment problem where two vectors are required to be aligned precisely.
+<   Also when given a single pair of vectors, the algorithm now returns the
+<   rotation with minimal magnitude, which can be considered as a minor
+<   backward incompatible change.
+< - A new representation for ``spatial.transform.Rotation`` called Davenport
+<   angles is available through ``from_davenport`` and ``as_davenport`` methods.
+< - Performance improvements have been added to ``distance.hamming`` and
+<   ``distance.correlation``.
+< - Improved performance of ``SphericalVoronoi`` ``sort_vertices_of_regions``
+<   and two dimensional area calculations.
+---
+> -   [`scipy.optimize.isotonic_regression`](../reference/generated/scipy.optimize.isotonic_regression.html#scipy.optimize.isotonic_regression) has been added to allow nonparametric isotonic
+>     regression.
+> -   [`scipy.optimize.nnls`](../reference/generated/scipy.optimize.nnls.html#scipy.optimize.nnls) is rewritten in Python and now implements the so-called
+>     fnnls or fast nnls, making it more efficient for high-dimensional problems.
+> -   The result object of [`scipy.optimize.root`](../reference/generated/scipy.optimize.root.html#scipy.optimize.root) and [`scipy.optimize.root_scalar`](../reference/generated/scipy.optimize.root_scalar.html#scipy.optimize.root_scalar)
+>     now reports the method used.
+> -   The `callback` method of [`scipy.optimize.differential_evolution`](../reference/generated/scipy.optimize.differential_evolution.html#scipy.optimize.differential_evolution) can now be
+>     passed more detailed information via the `intermediate_results` keyword
+>     parameter. Also, the evolution `strategy` now accepts a callable for
+>     additional customization. The performance of `differential_evolution` has
+>     also been improved.
+> -   [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) method `Newton-CG` now supports functions that
+>     return sparse Hessian matrices/arrays for the `hess` parameter and is slightly
+>     more efficient.
+> -   [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) method `BFGS` now accepts an initial estimate for the
+>     inverse of the Hessian, which allows for more efficient workflows in some
+>     circumstances. The new parameter is `hess_inv0`.
+> -   [`scipy.optimize.minimize`](../reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize) methods `CG`, `Newton-CG`, and `BFGS` now accept
+>     parameters `c1` and `c2`, allowing specification of the Armijo and curvature rule
+>     parameters, respectively.
+> -   [`scipy.optimize.curve_fit`](../reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit) performance has improved due to more efficient memoization
+>     of the callable function.
+169,188c112
+< `scipy.special` improvements
+< ======================
+< - Added `scipy.special.stirling2` for computation of Stirling numbers of the
+<   second kind. Both exact calculation and an asymptotic approximation
+<   (the default) are supported via ``exact=True`` and ``exact=False`` (the
+<   default) respectively.
+< - Added `scipy.special.betaincc` for computation of the complementary
+<   incomplete Beta function and `scipy.special.betainccinv` for computation of
+<   its inverse.
+< - Improved precision of `scipy.special.betainc` and `scipy.special.betaincinv`.
+< - Experimental support added for alternative backends: functions
+<   `scipy.special.log_ndtr`, `scipy.special.ndtr`, `scipy.special.ndtri`, 
+<   `scipy.special.erf`, `scipy.special.erfc`, `scipy.special.i0`, 
+<   `scipy.special.i0e`, `scipy.special.i1`, `scipy.special.i1e`, 
+<   `scipy.special.gammaln`, `scipy.special.gammainc`, `scipy.special.gammaincc`,
+<   `scipy.special.logit`, and `scipy.special.expit` now accept PyTorch tensors
+<   and CuPy arrays. These features are still under development and likely to 
+<   contain bugs, so they are disabled by default; enable them by setting a 
+<   ``SCIPY_ARRAY_API``  environment variable to ``1`` before importing ``scipy``. 
+<   Testing is appreciated!
+---
+> ### [`scipy.signal`](../reference/signal.html#module-scipy.signal) improvements
+189a114,123
+> -   `freqz`, `freqz_zpk`, and `group_delay` are now more accurate
+>     when `fs` has a default value.
+> -   The new class `ShortTimeFFT` provides a more versatile implementation of the
+>     short-time Fourier transform (STFT), its inverse (ISTFT) as well as the (cross-)
+>     spectrogram. It utilizes an improved algorithm for calculating the ISTFT based on
+>     dual windows and provides more fine-grained control of the parametrization especially
+>     in regard to scaling and phase-shift. Functionality was implemented to ease
+>     working with signal and STFT chunks. A section has been added to the "SciPy User Guide"
+>     providing algorithmic details. The functions `stft`, `istft` and `spectrogram`
+>     have been marked as legacy.
+191,238c125
+< `scipy.stats` improvements
+< =====================
+< - Added `scipy.stats.quantile_test`, a nonparametric test of whether a
+<   hypothesized value is the quantile associated with a specified probability.
+<   The ``confidence_interval`` method of the result object gives a confidence
+<   interval of the quantile.
+< - `scipy.stats.sampling.FastGeneratorInversion` provides a convenient
+<   interface to fast random sampling via numerical inversion of distribution
+<   CDFs.
+< - `scipy.stats.geometric_discrepancy` adds geometric/topological discrepancy
+<   metrics for random samples.
+< - `scipy.stats.multivariate_normal` now has a ``fit`` method for fitting
+<   distribution parameters to data via maximum likelihood estimation.
+< - `scipy.stats.bws_test` performs the Baumgartner-Weiss-Schindler test of
+<   whether two-samples were drawn from the same distribution.
+< - `scipy.stats.jf_skew_t` implements the Jones and Faddy skew-t distribution.
+< - `scipy.stats.anderson_ksamp` now supports a permutation version of the test
+<   using the ``method`` parameter.
+< - The ``fit`` methods of `scipy.stats.halfcauchy`, `scipy.stats.halflogistic`, and
+<   `scipy.stats.halfnorm` are faster and more accurate.
+< - `scipy.stats.beta` ``entropy`` accuracy has been improved for extreme values of
+<   distribution parameters.
+< - The accuracy of ``sf`` and/or ``isf`` methods have been improved for
+<   several distributions: `scipy.stats.burr`, `scipy.stats.hypsecant`,
+<   `scipy.stats.kappa3`, `scipy.stats.loglaplace`, `scipy.stats.lognorm`,
+<   `scipy.stats.lomax`, `scipy.stats.pearson3`, `scipy.stats.rdist`, and
+<   `scipy.stats.pareto`.
+< - The following functions now support parameters ``axis``, ``nan_policy``, and
+<   ``keep_dims``: `scipy.stats.entropy`, `scipy.stats.differential_entropy`,
+<   `scipy.stats.variation`, `scipy.stats.ansari`, `scipy.stats.bartlett`,
+<   `scipy.stats.levene`, `scipy.stats.fligner`, `scipy.stats.circmean`,
+<   `scipy.stats.circvar`, `scipy.stats.circstd`, `scipy.stats.tmean`,
+<   `scipy.stats.tvar`, `scipy.stats.tstd`, `scipy.stats.tmin`, `scipy.stats.tmax`,
+<   and `scipy.stats.tsem`.
+< - The ``logpdf`` and ``fit`` methods of `scipy.stats.skewnorm` have been improved.
+< - The beta negative binomial distribution is implemented as `scipy.stats.betanbinom`.
+< - Improved performance of `scipy.stats.invwishart` ``rvs`` and ``logpdf``.
+< - A source of intermediate overflow in `scipy.stats.boxcox_normmax` with
+<   ``method='mle'`` has been eliminated, and the returned value of ``lmbda`` is
+<   constrained such that the transformed data will not overflow.
+< - `scipy.stats.nakagami` ``stats`` is more accurate and reliable.
+< - A source of intermediate overflow in `scipy.norminvgauss.pdf` has been eliminated.
+< - Added support for masked arrays to `scipy.stats.circmean`, `scipy.stats.circvar`,
+<   `scipy.stats.circstd`, and `scipy.stats.entropy`.
+< - `scipy.stats.dirichlet` has gained a new covariance (``cov``) method.
+< - Improved accuracy of ``entropy`` method of `scipy.stats.multivariate_t` for large
+<   degrees of freedom.
+< - `scipy.stats.loggamma` has an improved ``entropy`` method.
+---
+> ### [`scipy.sparse`](../reference/sparse.html#module-scipy.sparse) improvements
+240,241c127,145
+< Deprecated features
+< ================
+---
+> -   `sparse.linalg` iterative solvers `sparse.linalg.cg`,
+>     `sparse.linalg.cgs`, `sparse.linalg.bicg`, `sparse.linalg.bicgstab`,
+>     `sparse.linalg.gmres`, and `sparse.linalg.qmr` are rewritten in Python.
+> -   Updated vendored SuperLU version to `6.0.1`, along with a few additional
+>     fixes.
+> -   Sparse arrays have gained additional constructors: `eye_array`,
+>     `random_array`, `block_array`, and `identity`. `kron` and `kronsum`
+>     have been adjusted to additionally support operation on sparse arrays.
+> -   Sparse matrices now support a transpose with `axes=(1, 0)`, to mirror
+>     the `.T` method.
+> -   `LaplacianNd` now allows selection of the largest subset of eigenvalues,
+>     and additionally now supports retrieval of the corresponding eigenvectors.
+>     The performance of `LaplacianNd` has also been improved.
+> -   The performance of `dok_matrix` and `dok_array` has been improved,
+>     and their inheritance behavior should be more robust.
+> -   `hstack`, `vstack`, and `block_diag` now work with sparse arrays, and
+>     preserve the input sparse type.
+> -   A new function, [`scipy.sparse.linalg.matrix_power`](../reference/generated/scipy.sparse.linalg.matrix_power.html#scipy.sparse.linalg.matrix_power), has been added, allowing
+>     for exponentiation of sparse arrays.
+243,260c147
+< - Error messages have been made clearer for objects that don't exist in the
+<   public namespace and warnings sharpened for private attributes that are not
+<   supposed to be imported at all.
+< - `scipy.signal.cmplx_sort` has been deprecated and will be removed in
+<   SciPy 1.15. A replacement you can use is provided in the deprecation message.
+< - Values the the argument ``initial`` of `scipy.integrate.cumulative_trapezoid`
+<   other than ``0`` and ``None`` are now deprecated.
+< - `scipy.stats.rvs_ratio_uniforms` is deprecated in favour of
+<   `scipy.stats.sampling.RatioUniforms`
+< - `scipy.integrate.quadrature` and `scipy.integrate.romberg` have been
+<   deprecated due to accuracy issues and interface shortcomings. They will
+<   be removed in SciPy 1.15. Please use `scipy.integrate.quad` instead.
+< - Coinciding with upcoming changes to function signatures (e.g. removal of a
+<   deprecated keyword), we are deprecating positional use of keyword arguments
+<   for the affected functions, which will raise an error starting with
+<   SciPy 1.14. In some cases, this has delayed the originally announced
+<   removal date, to give time to respond to the second part of the deprecation.
+<   Affected functions are: 
+---
+> ### [`scipy.spatial`](../reference/spatial.html#module-scipy.spatial) improvements
+262,267c149,162
+<   - ``linalg.{eigh, eigvalsh, pinv}``
+<   - ``integrate.simpson``
+<   - ``signal.{firls, firwin, firwin2, remez}``
+<   - ``sparse.linalg.{bicg, bicgstab, cg, cgs, gcrotmk, gmres, lgmres, minres, qmr, tfqmr}``
+<   - ``special.comb``
+<   - ``stats.kendalltau``
+---
+> -   Two new methods were implemented for `spatial.transform.Rotation`:
+>     `__pow__` to raise a rotation to integer or fractional power and
+>     `approx_equal` to check if two rotations are approximately equal.
+> -   The method `Rotation.align_vectors` was extended to solve a constrained
+>     alignment problem where two vectors are required to be aligned precisely.
+>     Also when given a single pair of vectors, the algorithm now returns the
+>     rotation with minimal magnitude, which can be considered as a minor
+>     backward incompatible change.
+> -   A new representation for `spatial.transform.Rotation` called Davenport
+>     angles is available through `from_davenport` and `as_davenport` methods.
+> -   Performance improvements have been added to `distance.hamming` and
+>     `distance.correlation`.
+> -   Improved performance of `SphericalVoronoi` `sort_vertices_of_regions`
+>     and two dimensional area calculations.
+269,279c164
+< - All wavelet functions have been deprecated, as PyWavelets provides suitable
+<   implementations; affected functions are: ``signal.{daub, qmf, cascade,
+<   morlet, morlet2, ricker, cwt}``
+< - ``scipy.integrate.trapz``, ``scipy.integrate.cumtrapz``, and ``scipy.integrate.simps`` have
+<   been deprecated in favour of `scipy.integrate.trapezoid`, `scipy.integrate.cumulative_trapezoid`,
+<   and `scipy.integrate.simpson` respectively and will be removed in SciPy 1.14.
+< - The ``tol`` argument of ``scipy.sparse.linalg.{bcg,bicstab,cg,cgs,gcrotmk,gmres,lgmres,minres,qmr,tfqmr}``
+<   is now deprecated in favour of ``rtol`` and will be removed in SciPy 1.14.
+<   Furthermore, the default value of ``atol`` for these functions is due
+<   to change to ``0.0`` in SciPy 1.14.
+<   
+---
+> ### [`scipy.special`](../reference/special.html#module-scipy.special) improvements
+281,284c166,183
+< Expired Deprecations
+< ================
+< There is an ongoing effort to follow through on long-standing deprecations.
+< The following previously deprecated features are affected:
+---
+> -   Added [`scipy.special.stirling2`](../reference/generated/scipy.special.stirling2.html#scipy.special.stirling2) for computation of Stirling numbers of the
+>     second kind. Both exact calculation and an asymptotic approximation
+>     (the default) are supported via `exact=True` and `exact=False` (the
+>     default) respectively.
+> -   Added [`scipy.special.betaincc`](../reference/generated/scipy.special.betaincc.html#scipy.special.betaincc) for computation of the complementary
+>     incomplete Beta function and [`scipy.special.betainccinv`](../reference/generated/scipy.special.betainccinv.html#scipy.special.betainccinv) for computation of
+>     its inverse.
+> -   Improved precision of [`scipy.special.betainc`](../reference/generated/scipy.special.betainc.html#scipy.special.betainc) and [`scipy.special.betaincinv`](../reference/generated/scipy.special.betaincinv.html#scipy.special.betaincinv).
+> -   Experimental support added for alternative backends: functions
+>     [`scipy.special.log_ndtr`](../reference/generated/scipy.special.log_ndtr.html#scipy.special.log_ndtr), [`scipy.special.ndtr`](../reference/generated/scipy.special.ndtr.html#scipy.special.ndtr), [`scipy.special.ndtri`](../reference/generated/scipy.special.ndtri.html#scipy.special.ndtri),
+>     [`scipy.special.erf`](../reference/generated/scipy.special.erf.html#scipy.special.erf), [`scipy.special.erfc`](../reference/generated/scipy.special.erfc.html#scipy.special.erfc), [`scipy.special.i0`](../reference/generated/scipy.special.i0.html#scipy.special.i0),
+>     [`scipy.special.i0e`](../reference/generated/scipy.special.i0e.html#scipy.special.i0e), [`scipy.special.i1`](../reference/generated/scipy.special.i1.html#scipy.special.i1), [`scipy.special.i1e`](../reference/generated/scipy.special.i1e.html#scipy.special.i1e),
+>     [`scipy.special.gammaln`](../reference/generated/scipy.special.gammaln.html#scipy.special.gammaln), [`scipy.special.gammainc`](../reference/generated/scipy.special.gammainc.html#scipy.special.gammainc), [`scipy.special.gammaincc`](../reference/generated/scipy.special.gammaincc.html#scipy.special.gammaincc),
+>     [`scipy.special.logit`](../reference/generated/scipy.special.logit.html#scipy.special.logit), and [`scipy.special.expit`](../reference/generated/scipy.special.expit.html#scipy.special.expit) now accept PyTorch tensors
+>     and CuPy arrays. These features are still under development and likely to
+>     contain bugs, so they are disabled by default; enable them by setting a
+>     `SCIPY_ARRAY_API` environment variable to `1` before importing `scipy`.
+>     Testing is appreciated!
+286,294c185
+< - The ``centered`` keyword of `scipy.stats.qmc.LatinHypercube` has been removed.
+<   Use ``scrambled=False`` instead of ``centered=True``.
+< - ``scipy.stats.binom_test`` has been removed in favour of `scipy.stats.binomtest`.
+< - In `scipy.stats.iqr`, the use of ``scale='raw'`` has been removed in favour 
+<   of ``scale=1``.
+< -  Functions from NumPy's main namespace which were exposed in SciPy's main
+<   namespace, such as ``numpy.histogram`` exposed by ``scipy.histogram``, have
+<   been removed from SciPy's main namespace. Please use the functions directly
+<   from ``numpy``.
+---
+> ### [`scipy.stats`](../reference/stats.html#module-scipy.stats) improvements
+296,303c187,232
+< 
+< Backwards incompatible changes
+< =========================
+< 
+< Other changes
+< ===========
+< - The arguments used to compile and link SciPy are now available via
+<   ``show_config``.
+---
+> -   Added [`scipy.stats.quantile_test`](../reference/generated/scipy.stats.quantile_test.html#scipy.stats.quantile_test), a nonparametric test of whether a
+>     hypothesized value is the quantile associated with a specified probability.
+>     The `confidence_interval` method of the result object gives a confidence
+>     interval of the quantile.
+> -   [`scipy.stats.sampling.FastGeneratorInversion`](../reference/generated/scipy.stats.sampling.FastGeneratorInversion.html#scipy.stats.sampling.FastGeneratorInversion) provides a convenient
+>     interface to fast random sampling via numerical inversion of distribution
+>     CDFs.
+> -   scipy.stats.geometric_discrepancy adds geometric/topological discrepancy
+>     metrics for random samples.
+> -   [`scipy.stats.multivariate_normal`](../reference/generated/scipy.stats.multivariate_normal.html#scipy.stats.multivariate_normal) now has a `fit` method for fitting
+>     distribution parameters to data via maximum likelihood estimation.
+> -   [`scipy.stats.bws_test`](../reference/generated/scipy.stats.bws_test.html#scipy.stats.bws_test) performs the Baumgartner-Weiss-Schindler test of
+>     whether two-samples were drawn from the same distribution.
+> -   [`scipy.stats.jf_skew_t`](../reference/generated/scipy.stats.jf_skew_t.html#scipy.stats.jf_skew_t) implements the Jones and Faddy skew-t distribution.
+> -   [`scipy.stats.anderson_ksamp`](../reference/generated/scipy.stats.anderson_ksamp.html#scipy.stats.anderson_ksamp) now supports a permutation version of the test
+>     using the `method` parameter.
+> -   The `fit` methods of [`scipy.stats.halfcauchy`](../reference/generated/scipy.stats.halfcauchy.html#scipy.stats.halfcauchy), [`scipy.stats.halflogistic`](../reference/generated/scipy.stats.halflogistic.html#scipy.stats.halflogistic), and
+>     [`scipy.stats.halfnorm`](../reference/generated/scipy.stats.halfnorm.html#scipy.stats.halfnorm) are faster and more accurate.
+> -   [`scipy.stats.beta`](../reference/generated/scipy.stats.beta.html#scipy.stats.beta) `entropy` accuracy has been improved for extreme values of
+>     distribution parameters.
+> -   The accuracy of `sf` and/or `isf` methods have been improved for
+>     several distributions: [`scipy.stats.burr`](../reference/generated/scipy.stats.burr.html#scipy.stats.burr), [`scipy.stats.hypsecant`](../reference/generated/scipy.stats.hypsecant.html#scipy.stats.hypsecant),
+>     [`scipy.stats.kappa3`](../reference/generated/scipy.stats.kappa3.html#scipy.stats.kappa3), [`scipy.stats.loglaplace`](../reference/generated/scipy.stats.loglaplace.html#scipy.stats.loglaplace), [`scipy.stats.lognorm`](../reference/generated/scipy.stats.lognorm.html#scipy.stats.lognorm),
+>     [`scipy.stats.lomax`](../reference/generated/scipy.stats.lomax.html#scipy.stats.lomax), [`scipy.stats.pearson3`](../reference/generated/scipy.stats.pearson3.html#scipy.stats.pearson3), [`scipy.stats.rdist`](../reference/generated/scipy.stats.rdist.html#scipy.stats.rdist), and
+>     [`scipy.stats.pareto`](../reference/generated/scipy.stats.pareto.html#scipy.stats.pareto).
+> -   The following functions now support parameters `axis`, `nan_policy`, and
+>     `keep_dims`: [`scipy.stats.entropy`](../reference/generated/scipy.stats.entropy.html#scipy.stats.entropy), [`scipy.stats.differential_entropy`](../reference/generated/scipy.stats.differential_entropy.html#scipy.stats.differential_entropy),
+>     [`scipy.stats.variation`](../reference/generated/scipy.stats.variation.html#scipy.stats.variation), [`scipy.stats.ansari`](../reference/generated/scipy.stats.ansari.html#scipy.stats.ansari), [`scipy.stats.bartlett`](../reference/generated/scipy.stats.bartlett.html#scipy.stats.bartlett),
+>     [`scipy.stats.levene`](../reference/generated/scipy.stats.levene.html#scipy.stats.levene), [`scipy.stats.fligner`](../reference/generated/scipy.stats.fligner.html#scipy.stats.fligner), [`scipy.stats.circmean`](../reference/generated/scipy.stats.circmean.html#scipy.stats.circmean),
+>     [`scipy.stats.circvar`](../reference/generated/scipy.stats.circvar.html#scipy.stats.circvar), [`scipy.stats.circstd`](../reference/generated/scipy.stats.circstd.html#scipy.stats.circstd), [`scipy.stats.tmean`](../reference/generated/scipy.stats.tmean.html#scipy.stats.tmean),
+>     [`scipy.stats.tvar`](../reference/generated/scipy.stats.tvar.html#scipy.stats.tvar), [`scipy.stats.tstd`](../reference/generated/scipy.stats.tstd.html#scipy.stats.tstd), [`scipy.stats.tmin`](../reference/generated/scipy.stats.tmin.html#scipy.stats.tmin), [`scipy.stats.tmax`](../reference/generated/scipy.stats.tmax.html#scipy.stats.tmax),
+>     and [`scipy.stats.tsem`](../reference/generated/scipy.stats.tsem.html#scipy.stats.tsem).
+> -   The `logpdf` and `fit` methods of [`scipy.stats.skewnorm`](../reference/generated/scipy.stats.skewnorm.html#scipy.stats.skewnorm) have been improved.
+> -   The beta negative binomial distribution is implemented as [`scipy.stats.betanbinom`](../reference/generated/scipy.stats.betanbinom.html#scipy.stats.betanbinom).
+> -   Improved performance of [`scipy.stats.invwishart`](../reference/generated/scipy.stats.invwishart.html#scipy.stats.invwishart) `rvs` and `logpdf`.
+> -   A source of intermediate overflow in [`scipy.stats.boxcox_normmax`](../reference/generated/scipy.stats.boxcox_normmax.html#scipy.stats.boxcox_normmax) with
+>     `method='mle'` has been eliminated, and the returned value of `lmbda` is
+>     constrained such that the transformed data will not overflow.
+> -   [`scipy.stats.nakagami`](../reference/generated/scipy.stats.nakagami.html#scipy.stats.nakagami) `stats` is more accurate and reliable.
+> -   A source of intermediate overflow in scipy.norminvgauss.pdf has been eliminated.
+> -   Added support for masked arrays to [`scipy.stats.circmean`](../reference/generated/scipy.stats.circmean.html#scipy.stats.circmean), [`scipy.stats.circvar`](../reference/generated/scipy.stats.circvar.html#scipy.stats.circvar),
+>     [`scipy.stats.circstd`](../reference/generated/scipy.stats.circstd.html#scipy.stats.circstd), and [`scipy.stats.entropy`](../reference/generated/scipy.stats.entropy.html#scipy.stats.entropy).
+> -   [`scipy.stats.dirichlet`](../reference/generated/scipy.stats.dirichlet.html#scipy.stats.dirichlet) has gained a new covariance (`cov`) method.
+> -   Improved accuracy of `entropy` method of [`scipy.stats.multivariate_t`](../reference/generated/scipy.stats.multivariate_t.html#scipy.stats.multivariate_t) for large
+>     degrees of freedom.
+> -   [`scipy.stats.loggamma`](../reference/generated/scipy.stats.loggamma.html#scipy.stats.loggamma) has an improved `entropy` method.
+304a234
+> ## Deprecated features
+306,307c236,268
+< Authors
+< ======
+---
+> -   Error messages have been made clearer for objects that don't exist in the
+>     public namespace and warnings sharpened for private attributes that are not
+>     supposed to be imported at all.
+> -   scipy.signal.cmplx_sort has been deprecated and will be removed in
+>     SciPy 1.15. A replacement you can use is provided in the deprecation message.
+> -   Values the argument `initial` of [`scipy.integrate.cumulative_trapezoid`](../reference/generated/scipy.integrate.cumulative_trapezoid.html#scipy.integrate.cumulative_trapezoid)
+>     other than `0` and `None` are now deprecated.
+> -   scipy.stats.rvs_ratio_uniforms is deprecated in favour of
+>     [`scipy.stats.sampling.RatioUniforms`](../reference/generated/scipy.stats.sampling.RatioUniforms.html#scipy.stats.sampling.RatioUniforms)
+> -   scipy.integrate.quadrature and scipy.integrate.romberg have been
+>     deprecated due to accuracy issues and interface shortcomings. They will
+>     be removed in SciPy 1.15. Please use [`scipy.integrate.quad`](../reference/generated/scipy.integrate.quad.html#scipy.integrate.quad) instead.
+> -   Coinciding with upcoming changes to function signatures (e.g. removal of a
+>     deprecated keyword), we are deprecating positional use of keyword arguments
+>     for the affected functions, which will raise an error starting with
+>     SciPy 1.14. In some cases, this has delayed the originally announced
+>     removal date, to give time to respond to the second part of the deprecation.
+>     Affected functions are:
+>     -   `linalg.{eigh, eigvalsh, pinv}`
+>     -   `integrate.simpson`
+>     -   `signal.{firls, firwin, firwin2, remez}`
+>     -   `sparse.linalg.{bicg, bicgstab, cg, cgs, gcrotmk, gmres, lgmres, minres, qmr, tfqmr}`
+>     -   `special.comb`
+>     -   `stats.kendalltau`
+> -   All wavelet functions have been deprecated, as PyWavelets provides suitable
+>     implementations; affected functions are: `signal.{daub, qmf, cascade, morlet, morlet2, ricker, cwt}`
+> -   `scipy.integrate.trapz`, `scipy.integrate.cumtrapz`, and `scipy.integrate.simps` have
+>     been deprecated in favour of [`scipy.integrate.trapezoid`](../reference/generated/scipy.integrate.trapezoid.html#scipy.integrate.trapezoid), [`scipy.integrate.cumulative_trapezoid`](../reference/generated/scipy.integrate.cumulative_trapezoid.html#scipy.integrate.cumulative_trapezoid),
+>     and [`scipy.integrate.simpson`](../reference/generated/scipy.integrate.simpson.html#scipy.integrate.simpson) respectively and will be removed in SciPy 1.14.
+> -   The `tol` argument of `scipy.sparse.linalg.{bcg,bicstab,cg,cgs,gcrotmk,gmres,lgmres,minres,qmr,tfqmr}`
+>     is now deprecated in favour of `rtol` and will be removed in SciPy 1.14.
+>     Furthermore, the default value of `atol` for these functions is due
+>     to change to `0.0` in SciPy 1.14.
+309,472c270
+< * Name (commits)
+< * endolith (1)
+< * h-vetinari (34)
+< * Tom Adamczewski (3) +
+< * Anudeep Adiraju (1) +
+< * akeemlh (1)
+< * Alex Amadori (2) +
+< * Raja Yashwanth Avantsa (2) +
+< * Seth Axen (1) +
+< * Ross Barnowski (1)
+< * Dan Barzilay (1) +
+< * Ashish Bastola (1) +
+< * Christoph Baumgarten (2)
+< * Ben Beasley (3) +
+< * Doron Behar (1)
+< * Peter Bell (1)
+< * Sebastian Berg (1)
+< * Ben Boeckel (1) +
+< * David Boetius (1) +
+< * Matt Borland (1)
+< * Jake Bowhay (103)
+< * Larry Bradley (1) +
+< * Dietrich Brunn (5)
+< * Evgeni Burovski (102)
+< * Matthias Bussonnier (18)
+< * CJ Carey (6)
+< * Colin Carroll (1) +
+< * Aadya Chinubhai (1) +
+< * Luca Citi (1)
+< * Lucas Colley (141) +
+< * com3dian (1) +
+< * Anirudh Dagar (4)
+< * Danni (1) +
+< * Dieter Werthmüller (1)
+< * John Doe (2) +
+< * Philippe DONNAT (2) +
+< * drestebon (1) +
+< * Thomas Duvernay (1)
+< * elbarso (1) +
+< * emilfrost (2) +
+< * Paul Estano (8) +
+< * Evandro (2)
+< * Franz Király (1) +
+< * Nikita Furin (1) +
+< * gabrielthomsen (1) +
+< * Lukas Geiger (9) +
+< * Artem Glebov (22) +
+< * Caden Gobat (1)
+< * Ralf Gommers (127)
+< * Alexander Goscinski (2) +
+< * Rohit Goswami (2) +
+< * Olivier Grisel (1)
+< * Matt Haberland (244)
+< * Charles Harris (1)
+< * harshilkamdar (1) +
+< * Alon Hovav (2) +
+< * Gert-Ludwig Ingold (1)
+< * Romain Jacob (1) +
+< * jcwhitehead (1) +
+< * Julien Jerphanion (13)
+< * He Jia (1)
+< * JohnWT (1) +
+< * jokasimr (1) +
+< * Evan W Jones (1)
+< * Karen Róbertsdóttir (1) +
+< * Ganesh Kathiresan (1)
+< * Robert Kern (11)
+< * Andrew Knyazev (4)
+< * Uwe L. Korn (1) +
+< * Rishi Kulkarni (1)
+< * Kale Kundert (3) +
+< * Jozsef Kutas (2)
+< * Kyle0 (2) +
+< * Robert Langefeld (1) +
+< * Jeffrey Larson (1) +
+< * Jessy Lauer (1) +
+< * lciti (1) +
+< * Hoang Le (1) +
+< * Antony Lee (5)
+< * Thilo Leitzbach (4) +
+< * LemonBoy (2) +
+< * Ellie Litwack (8) +
+< * Thomas Loke (4) +
+< * Malte Londschien (1) +
+< * Christian Lorentzen (6)
+< * Adam Lugowski (10) +
+< * lutefiskhotdish (1)
+< * mainak33 (1) +
+< * Ben Mares (11) +
+< * mart-mihkel (2) +
+< * Mateusz Sokół (24) +
+< * Nikolay Mayorov (4)
+< * Nicholas McKibben (1)
+< * Melissa Weber Mendonça (7)
+< * Michał Górny (1)
+< * Kat Mistberg (2) +
+< * mkiffer (1) +
+< * mocquin (1) +
+< * Nicolas Mokus (2) +
+< * Sturla Molden (1)
+< * Roberto Pastor Muela (3) +
+< * Bijay Nayak (1) +
+< * Andrew Nelson (105)
+< * Praveer Nidamaluri (3) +
+< * Lysandros Nikolaou (2)
+< * Dimitri Papadopoulos Orfanos (7)
+< * Pablo Rodríguez Pérez (1) +
+< * Dimitri Papadopoulos (2)
+< * Tirth Patel (14)
+< * Kyle Paterson (1) +
+< * Paul (4) +
+< * Yann Pellegrini (2) +
+< * Matti Picus (4)
+< * Ilhan Polat (36)
+< * Pranav (1) +
+< * Bharat Raghunathan (1)
+< * Chris Rapson (1) +
+< * Matteo Raso (4)
+< * Tyler Reddy (215)
+< * Martin Reinecke (1)
+< * Tilo Reneau-Cardoso (1) +
+< * resting-dove (2) +
+< * Simon Segerblom Rex (4)
+< * Lucas Roberts (2)
+< * Pamphile Roy (31)
+< * Feras Saad (3) +
+< * Atsushi Sakai (3)
+< * Masahiro Sakai (2) +
+< * Omar Salman (14)
+< * Andrej Savikin (1) +
+< * Daniel Schmitz (55)
+< * Dan Schult (19)
+< * Scott Shambaugh (9)
+< * Sheila-nk (2) +
+< * Mauro Silberberg (3) +
+< * Maciej Skorski (1) +
+< * Laurent Sorber (1) +
+< * Albert Steppi (28)
+< * Kai Striega (1)
+< * Saswat Susmoy (1) +
+< * Alex Szatmary (1) +
+< * Søren Fuglede Jørgensen (3)
+< * othmane tamri (3) +
+< * Ewout ter Hoeven (1)
+< * Will Tirone (1)
+< * TLeitzbach (1) +
+< * Kevin Topolski (1) +
+< * Edgar Andrés Margffoy Tuay (1)
+< * Dipansh Uikey (1) +
+< * Matus Valo (3)
+< * Christian Veenhuis (2)
+< * Nicolas Vetsch (1) +
+< * Isaac Virshup (7)
+< * Hielke Walinga (2) +
+< * Stefan van der Walt (2)
+< * Warren Weckesser (7)
+< * Bernhard M. Wiedemann (4)
+< * Levi John Wolf (1)
+< * Xuefeng Xu (4) +
+< * Rory Yorke (2)
+< * YoussefAli1 (1) +
+< * Irwin Zaid (4) +
+< * Jinzhe Zeng (1) +
+< * JIMMY ZHAO (1) +
+---
+> ## Expired Deprecations
+473a272,458
+> There is an ongoing effort to follow through on long-standing deprecations.
+> The following previously deprecated features are affected:
+> 
+> -   The `centered` keyword of [`scipy.stats.qmc.LatinHypercube`](../reference/generated/scipy.stats.qmc.LatinHypercube.html#scipy.stats.qmc.LatinHypercube) has been removed.
+>     Use `scrambled=False` instead of `centered=True`.
+> -   `scipy.stats.binom_test` has been removed in favour of [`scipy.stats.binomtest`](../reference/generated/scipy.stats.binomtest.html#scipy.stats.binomtest).
+> -   In [`scipy.stats.iqr`](../reference/generated/scipy.stats.iqr.html#scipy.stats.iqr), the use of `scale='raw'` has been removed in favour
+>     of `scale=1`.
+> -   Functions from NumPy's main namespace which were exposed in SciPy's main
+>     namespace, such as `numpy.histogram` exposed by `scipy.histogram`, have
+>     been removed from SciPy's main namespace. Please use the functions directly
+>     from `numpy`.
+> 
+> ## Backwards incompatible changes
+> 
+> ## Other changes
+> 
+> -   The arguments used to compile and link SciPy are now available via
+>     `show_config`.
+> 
+> ## Authors
+> 
+> -   Name (commits)
+> -   endolith (1)
+> -   h-vetinari (34)
+> -   Tom Adamczewski (3) +
+> -   Anudeep Adiraju (1) +
+> -   akeemlh (1)
+> -   Alex Amadori (2) +
+> -   Raja Yashwanth Avantsa (2) +
+> -   Seth Axen (1) +
+> -   Ross Barnowski (1)
+> -   Dan Barzilay (1) +
+> -   Ashish Bastola (1) +
+> -   Christoph Baumgarten (2)
+> -   Ben Beasley (3) +
+> -   Doron Behar (1)
+> -   Peter Bell (1)
+> -   Sebastian Berg (1)
+> -   Ben Boeckel (1) +
+> -   David Boetius (1) +
+> -   Matt Borland (1)
+> -   Jake Bowhay (103)
+> -   Larry Bradley (1) +
+> -   Dietrich Brunn (5)
+> -   Evgeni Burovski (102)
+> -   Matthias Bussonnier (18)
+> -   CJ Carey (6)
+> -   Colin Carroll (1) +
+> -   Aadya Chinubhai (1) +
+> -   Luca Citi (1)
+> -   Lucas Colley (141) +
+> -   com3dian (1) +
+> -   Anirudh Dagar (4)
+> -   Danni (1) +
+> -   Dieter Werthmüller (1)
+> -   John Doe (2) +
+> -   Philippe DONNAT (2) +
+> -   drestebon (1) +
+> -   Thomas Duvernay (1)
+> -   elbarso (1) +
+> -   emilfrost (2) +
+> -   Paul Estano (8) +
+> -   Evandro (2)
+> -   Franz Király (1) +
+> -   Nikita Furin (1) +
+> -   gabrielthomsen (1) +
+> -   Lukas Geiger (9) +
+> -   Artem Glebov (22) +
+> -   Caden Gobat (1)
+> -   Ralf Gommers (127)
+> -   Alexander Goscinski (2) +
+> -   Rohit Goswami (2) +
+> -   Olivier Grisel (1)
+> -   Matt Haberland (244)
+> -   Charles Harris (1)
+> -   harshilkamdar (1) +
+> -   Alon Hovav (2) +
+> -   Gert-Ludwig Ingold (1)
+> -   Romain Jacob (1) +
+> -   jcwhitehead (1) +
+> -   Julien Jerphanion (13)
+> -   He Jia (1)
+> -   JohnWT (1) +
+> -   jokasimr (1) +
+> -   Evan W Jones (1)
+> -   Karen Róbertsdóttir (1) +
+> -   Ganesh Kathiresan (1)
+> -   Robert Kern (11)
+> -   Andrew Knyazev (4)
+> -   Uwe L. Korn (1) +
+> -   Rishi Kulkarni (1)
+> -   Kale Kundert (3) +
+> -   Jozsef Kutas (2)
+> -   Kyle0 (2) +
+> -   Robert Langefeld (1) +
+> -   Jeffrey Larson (1) +
+> -   Jessy Lauer (1) +
+> -   lciti (1) +
+> -   Hoang Le (1) +
+> -   Antony Lee (5)
+> -   Thilo Leitzbach (4) +
+> -   LemonBoy (2) +
+> -   Ellie Litwack (8) +
+> -   Thomas Loke (4) +
+> -   Malte Londschien (1) +
+> -   Christian Lorentzen (6)
+> -   Adam Lugowski (10) +
+> -   lutefiskhotdish (1)
+> -   mainak33 (1) +
+> -   Ben Mares (11) +
+> -   mart-mihkel (2) +
+> -   Mateusz Sokół (24) +
+> -   Nikolay Mayorov (4)
+> -   Nicholas McKibben (1)
+> -   Melissa Weber Mendonça (7)
+> -   Michał Górny (1)
+> -   Kat Mistberg (2) +
+> -   mkiffer (1) +
+> -   mocquin (1) +
+> -   Nicolas Mokus (2) +
+> -   Sturla Molden (1)
+> -   Roberto Pastor Muela (3) +
+> -   Bijay Nayak (1) +
+> -   Andrew Nelson (105)
+> -   Praveer Nidamaluri (3) +
+> -   Lysandros Nikolaou (2)
+> -   Dimitri Papadopoulos Orfanos (7)
+> -   Pablo Rodríguez Pérez (1) +
+> -   Dimitri Papadopoulos (2)
+> -   Tirth Patel (14)
+> -   Kyle Paterson (1) +
+> -   Paul (4) +
+> -   Yann Pellegrini (2) +
+> -   Matti Picus (4)
+> -   Ilhan Polat (36)
+> -   Pranav (1) +
+> -   Bharat Raghunathan (1)
+> -   Chris Rapson (1) +
+> -   Matteo Raso (4)
+> -   Tyler Reddy (215)
+> -   Martin Reinecke (1)
+> -   Tilo Reneau-Cardoso (1) +
+> -   resting-dove (2) +
+> -   Simon Segerblom Rex (4)
+> -   Lucas Roberts (2)
+> -   Pamphile Roy (31)
+> -   Feras Saad (3) +
+> -   Atsushi Sakai (3)
+> -   Masahiro Sakai (2) +
+> -   Omar Salman (14)
+> -   Andrej Savikin (1) +
+> -   Daniel Schmitz (55)
+> -   Dan Schult (19)
+> -   Scott Shambaugh (9)
+> -   Sheila-nk (2) +
+> -   Mauro Silberberg (3) +
+> -   Maciej Skorski (1) +
+> -   Laurent Sorber (1) +
+> -   Albert Steppi (28)
+> -   Kai Striega (1)
+> -   Saswat Susmoy (1) +
+> -   Alex Szatmary (1) +
+> -   Søren Fuglede Jørgensen (3)
+> -   othmane tamri (3) +
+> -   Ewout ter Hoeven (1)
+> -   Will Tirone (1)
+> -   TLeitzbach (1) +
+> -   Kevin Topolski (1) +
+> -   Edgar Andrés Margffoy Tuay (1)
+> -   Dipansh Uikey (1) +
+> -   Matus Valo (3)
+> -   Christian Veenhuis (2)
+> -   Nicolas Vetsch (1) +
+> -   Isaac Virshup (7)
+> -   Hielke Walinga (2) +
+> -   Stefan van der Walt (2)
+> -   Warren Weckesser (7)
+> -   Bernhard M. Wiedemann (4)
+> -   Levi John Wolf (1)
+> -   Xuefeng Xu (4) +
+> -   Rory Yorke (2)
+> -   YoussefAli1 (1) +
+> -   Irwin Zaid (4) +
+> -   Jinzhe Zeng (1) +
+> -   JIMMY ZHAO (1) +
+> 
+476c461,462
+< This list of names is automatically generated, and may not be fully complete.
+\ No newline at end of file
+---
+> This list of names is automatically generated, and may not be fully complete.
+> 

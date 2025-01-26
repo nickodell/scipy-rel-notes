@@ -1,0 +1,517 @@
+1,2c1
+< SciPy 1.13.0 Release Notes
+< ====================
+---
+> # SciPy 1.13.0 Release Notes
+4,8c3,6
+< SciPy `1.13.0` is the culmination of 3 months of hard work. This
+< out-of-band release aims to support NumPy ``2.0.0``, and is backwards
+< compatible to NumPy ``1.22.4``. The version of OpenBLAS used to build
+< the PyPI wheels has been increased to ``0.3.26.dev``.
+< 
+---
+> SciPy 1.13.0 is the culmination of 3 months of hard work. This
+> out-of-band release aims to support NumPy `2.0.0`, and is backwards
+> compatible to NumPy `1.22.4`. The version of OpenBLAS used to build
+> the PyPI wheels has been increased to `0.3.26.dev`.
+10d7
+< 
+12a10
+> ## Highlights of this release
+14,23c12,19
+< Highlights of this release
+< ===================
+< - Support for NumPy ``2.0.0``.
+< - Interactive examples have been added to the documentation, allowing users
+<   to run the examples locally on embedded Jupyterlite notebooks in their
+<   browser.
+< - Preliminary 1D array support for the COO and DOK sparse formats.
+< - Several `scipy.stats` functions have gained support for additional
+<   ``axis``, ``nan_policy``, and ``keepdims`` arguments. `scipy.stats` also
+<   has several performance and accuracy improvements.
+---
+> -   Support for NumPy `2.0.0`.
+> -   Interactive examples have been added to the documentation, allowing users
+>     to run the examples locally on embedded Jupyterlite notebooks in their
+>     browser.
+> -   Preliminary 1D array support for the COO and DOK sparse formats.
+> -   Several [`scipy.stats`](../reference/stats.html#module-scipy.stats) functions have gained support for additional
+>     `axis`, `nan_policy`, and `keepdims` arguments. [`scipy.stats`](../reference/stats.html#module-scipy.stats) also
+>     has several performance and accuracy improvements.
+24a21
+> ## New features
+26,27c23
+< New features
+< ==========
+---
+> ### [`scipy.integrate`](../reference/integrate.html#module-scipy.integrate) improvements
+29,35c25,29
+< `scipy.integrate` improvements
+< ========================
+< - The ``terminal`` attribute of `scipy.integrate.solve_ivp` ``events``
+<   callables now additionally accepts integer values to specify a number
+<   of occurrences required for termination, rather than the previous restriction
+<   of only accepting a ``bool`` value to terminate on the first registered
+<   event.
+---
+> -   The `terminal` attribute of [`scipy.integrate.solve_ivp`](../reference/generated/scipy.integrate.solve_ivp.html#scipy.integrate.solve_ivp) `events`
+>     callables now additionally accepts integer values to specify a number
+>     of occurrences required for termination, rather than the previous restriction
+>     of only accepting a `bool` value to terminate on the first registered
+>     event.
+36a31
+> ### [`scipy.io`](../reference/io.html#module-scipy.io) improvements
+38,40c33
+< `scipy.io` improvements
+< =======================
+< - `scipy.io.wavfile.write` has improved ``dtype`` input validation.
+---
+> -   [`scipy.io.wavfile.write`](../reference/generated/scipy.io.wavfile.write.html#scipy.io.wavfile.write) has improved `dtype` input validation.
+41a35
+> ### [`scipy.interpolate`](../reference/interpolate.html#module-scipy.interpolate) improvements
+43,62c37,53
+< `scipy.interpolate` improvements
+< ================================
+< - The Modified Akima Interpolation has been added to
+<   ``interpolate.Akima1DInterpolator``, available via the new ``method``
+<   argument.
+< - New method ``BSpline.insert_knot`` inserts a knot into a ``BSpline`` instance.
+<   This routine is similar to the module-level `scipy.interpolate.insert`
+<   function, and works with the BSpline objects instead of ``tck`` tuples.
+< - ``RegularGridInterpolator`` gained the functionality to compute derivatives
+<   in place. For instance, ``RegularGridInterolator((x, y), values,
+<   method="cubic")(xi, nu=(1, 1))`` evaluates the mixed second derivative,
+<   :math:`\partial^2 / \partial x \partial y` at ``xi``.
+< - Performance characteristics of tensor-product spline methods of
+<   ``RegularGridInterpolator`` have been changed: evaluations should be
+<   significantly faster, while construction might be slower. If you experience
+<   issues with construction times, you may need to experiment with optional
+<   keyword arguments ``solver`` and ``solver_args``. Previous behavior (fast
+<   construction, slow evaluations) can be obtained via `"*_legacy"` methods:
+<   ``method="cubic_legacy"`` is exactly equivalent to ``method="cubic"`` in
+<   previous releases. See ``gh-19633`` for details.
+---
+> -   The Modified Akima Interpolation has been added to
+>     `interpolate.Akima1DInterpolator`, available via the new `method`
+>     argument.
+> -   New method `BSpline.insert_knot` inserts a knot into a `BSpline` instance.
+>     This routine is similar to the module-level [`scipy.interpolate.insert`](../reference/generated/scipy.interpolate.insert.html#scipy.interpolate.insert)
+>     function, and works with the BSpline objects instead of `tck` tuples.
+> -   `RegularGridInterpolator` gained the functionality to compute derivatives
+>     in place. For instance, `RegularGridInterolator((x, y), values, method="cubic")(xi, nu=(1, 1))` evaluates the mixed second derivative,
+>     \\(\\partial\^2 / \\partial x \\partial y\\) at `xi`.
+> -   Performance characteristics of tensor-product spline methods of
+>     `RegularGridInterpolator` have been changed: evaluations should be
+>     significantly faster, while construction might be slower. If you experience
+>     issues with construction times, you may need to experiment with optional
+>     keyword arguments `solver` and `solver_args`. Previous behavior (fast
+>     construction, slow evaluations) can be obtained via "\*\_legacy" methods:
+>     `method="cubic_legacy"` is exactly equivalent to `method="cubic"` in
+>     previous releases. See `gh-19633` for details.
+63a55
+> ### [`scipy.signal`](../reference/signal.html#module-scipy.signal) improvements
+65,68c57,58
+< `scipy.signal` improvements
+< ===========================
+< - Many filter design functions now have improved input validation for the
+<   sampling frequency (``fs``).
+---
+> -   Many filter design functions now have improved input validation for the
+>     sampling frequency (`fs`).
+69a60
+> ### [`scipy.sparse`](../reference/sparse.html#module-scipy.sparse) improvements
+71,81c62,70
+< `scipy.sparse` improvements
+< ===========================
+< - ``coo_array`` now supports 1D shapes, and has additional 1D support for
+<   ``min``, ``max``, ``argmin``, and ``argmax``. The DOK format now has
+<   preliminary 1D support as well, though only supports simple integer indices
+<   at the time of writing.
+< - Experimental support has been added for ``pydata/sparse`` array inputs to
+<   `scipy.sparse.csgraph`.
+< - ``dok_array`` and ``dok_matrix`` now have proper implementations of
+<   ``fromkeys``.
+< - ``csr`` and ``csc`` formats now have improved ``setdiag`` performance.
+---
+> -   `coo_array` now supports 1D shapes, and has additional 1D support for
+>     `min`, `max`, `argmin`, and `argmax`. The DOK format now has
+>     preliminary 1D support as well, though only supports simple integer indices
+>     at the time of writing.
+> -   Experimental support has been added for `pydata/sparse` array inputs to
+>     [`scipy.sparse.csgraph`](../reference/sparse.csgraph.html#module-scipy.sparse.csgraph).
+> -   `dok_array` and `dok_matrix` now have proper implementations of
+>     `fromkeys`.
+> -   `csr` and `csc` formats now have improved `setdiag` performance.
+82a72
+> ### [`scipy.spatial`](../reference/spatial.html#module-scipy.spatial) improvements
+84,87c74,75
+< `scipy.spatial` improvements
+< ============================
+< - ``voronoi_plot_2d`` now draws Voronoi edges to infinity more clearly
+<   when the aspect ratio is skewed.
+---
+> -   `voronoi_plot_2d` now draws Voronoi edges to infinity more clearly
+>     when the aspect ratio is skewed.
+88a77
+> ### [`scipy.special`](../reference/special.html#module-scipy.special) improvements
+90,95c79,82
+< `scipy.special` improvements
+< ============================
+< - All Fortran code, namely, ``AMOS``, ``specfun``, and ``cdflib`` libraries
+<   that the majority of special functions depend on, is ported to Cython/C.
+< - The function ``factorialk`` now also supports faster, approximate
+<   calculation using ``exact=False``.
+---
+> -   All Fortran code, namely, `AMOS`, `specfun`, and `cdflib` libraries
+>     that the majority of special functions depend on, is ported to Cython/C.
+> -   The function `factorialk` now also supports faster, approximate
+>     calculation using `exact=False`.
+96a84
+> ### [`scipy.stats`](../reference/stats.html#module-scipy.stats) improvements
+98,130c86,116
+< `scipy.stats` improvements
+< ==========================
+< - `scipy.stats.rankdata` and `scipy.stats.wilcoxon` have been vectorized,
+<   improving their performance and the performance of hypothesis tests that
+<   depend on them.
+< - ``stats.mannwhitneyu`` should now be faster due to a vectorized statistic
+<   calculation, improved caching, improved exploitation of symmetry, and a
+<   memory reduction. ``PermutationMethod`` support was also added.
+< - `scipy.stats.mood` now has ``nan_policy`` and ``keepdims`` support.
+< - `scipy.stats.brunnermunzel` now has ``axis`` and ``keepdims`` support.
+< - `scipy.stats.friedmanchisquare`, `scipy.stats.shapiro`,
+<   `scipy.stats.normaltest`, `scipy.stats.skewtest`,
+<   `scipy.stats.kurtosistest`, `scipy.stats.f_oneway`,
+<   `scipy.stats.alexandergovern`, `scipy.stats.combine_pvalues`, and
+<   `scipy.stats.kstest` have gained ``axis``, ``nan_policy`` and
+<   ``keepdims`` support.
+< - `scipy.stats.boxcox_normmax` has gained a ``ymax`` parameter to allow user
+<   specification of the maximum value of the transformed data.
+< - `scipy.stats.vonmises` ``pdf`` method has been extended to support
+<   ``kappa=0``. The ``fit`` method is also more performant due to the use of
+<   non-trivial bounds to solve for ``kappa``.
+< - High order ``moment`` calculations for `scipy.stats.powerlaw` are now more
+<   accurate.
+< - The ``fit`` methods of  `scipy.stats.gamma` (with ``method='mm'``) and
+<   `scipy.stats.loglaplace` are faster and more reliable.
+< - `scipy.stats.goodness_of_fit` now supports the use of a custom ``statistic``
+<   provided by the user.
+< - `scipy.stats.wilcoxon` now supports ``PermutationMethod``, enabling
+<   calculation of accurate p-values in the presence of ties and zeros.
+< - `scipy.stats.monte_carlo_test` now has improved robustness in the face of
+<   numerical noise.
+< - `scipy.stats.wasserstein_distance_nd` was introduced to compute the
+<   Wasserstein-1 distance between two N-D discrete distributions.
+---
+> -   [`scipy.stats.rankdata`](../reference/generated/scipy.stats.rankdata.html#scipy.stats.rankdata) and [`scipy.stats.wilcoxon`](../reference/generated/scipy.stats.wilcoxon.html#scipy.stats.wilcoxon) have been vectorized,
+>     improving their performance and the performance of hypothesis tests that
+>     depend on them.
+> -   `stats.mannwhitneyu` should now be faster due to a vectorized statistic
+>     calculation, improved caching, improved exploitation of symmetry, and a
+>     memory reduction. `PermutationMethod` support was also added.
+> -   [`scipy.stats.mood`](../reference/generated/scipy.stats.mood.html#scipy.stats.mood) now has `nan_policy` and `keepdims` support.
+> -   [`scipy.stats.brunnermunzel`](../reference/generated/scipy.stats.brunnermunzel.html#scipy.stats.brunnermunzel) now has `axis` and `keepdims` support.
+> -   [`scipy.stats.friedmanchisquare`](../reference/generated/scipy.stats.friedmanchisquare.html#scipy.stats.friedmanchisquare), [`scipy.stats.shapiro`](../reference/generated/scipy.stats.shapiro.html#scipy.stats.shapiro),
+>     [`scipy.stats.normaltest`](../reference/generated/scipy.stats.normaltest.html#scipy.stats.normaltest), [`scipy.stats.skewtest`](../reference/generated/scipy.stats.skewtest.html#scipy.stats.skewtest),
+>     [`scipy.stats.kurtosistest`](../reference/generated/scipy.stats.kurtosistest.html#scipy.stats.kurtosistest), [`scipy.stats.f_oneway`](../reference/generated/scipy.stats.f_oneway.html#scipy.stats.f_oneway),
+>     [`scipy.stats.alexandergovern`](../reference/generated/scipy.stats.alexandergovern.html#scipy.stats.alexandergovern), [`scipy.stats.combine_pvalues`](../reference/generated/scipy.stats.combine_pvalues.html#scipy.stats.combine_pvalues), and
+>     [`scipy.stats.kstest`](../reference/generated/scipy.stats.kstest.html#scipy.stats.kstest) have gained `axis`, `nan_policy` and
+>     `keepdims` support.
+> -   [`scipy.stats.boxcox_normmax`](../reference/generated/scipy.stats.boxcox_normmax.html#scipy.stats.boxcox_normmax) has gained a `ymax` parameter to allow user
+>     specification of the maximum value of the transformed data.
+> -   [`scipy.stats.vonmises`](../reference/generated/scipy.stats.vonmises.html#scipy.stats.vonmises) `pdf` method has been extended to support
+>     `kappa=0`. The `fit` method is also more performant due to the use of
+>     non-trivial bounds to solve for `kappa`.
+> -   High order `moment` calculations for [`scipy.stats.powerlaw`](../reference/generated/scipy.stats.powerlaw.html#scipy.stats.powerlaw) are now more
+>     accurate.
+> -   The `fit` methods of [`scipy.stats.gamma`](../reference/generated/scipy.stats.gamma.html#scipy.stats.gamma) (with `method='mm'`) and
+>     [`scipy.stats.loglaplace`](../reference/generated/scipy.stats.loglaplace.html#scipy.stats.loglaplace) are faster and more reliable.
+> -   [`scipy.stats.goodness_of_fit`](../reference/generated/scipy.stats.goodness_of_fit.html#scipy.stats.goodness_of_fit) now supports the use of a custom `statistic`
+>     provided by the user.
+> -   [`scipy.stats.wilcoxon`](../reference/generated/scipy.stats.wilcoxon.html#scipy.stats.wilcoxon) now supports `PermutationMethod`, enabling
+>     calculation of accurate p-values in the presence of ties and zeros.
+> -   [`scipy.stats.monte_carlo_test`](../reference/generated/scipy.stats.monte_carlo_test.html#scipy.stats.monte_carlo_test) now has improved robustness in the face of
+>     numerical noise.
+> -   [`scipy.stats.wasserstein_distance_nd`](../reference/generated/scipy.stats.wasserstein_distance_nd.html#scipy.stats.wasserstein_distance_nd) was introduced to compute the
+>     Wasserstein-1 distance between two N-D discrete distributions.
+131a118
+> ## Deprecated features
+133,139c120,124
+< Deprecated features
+< ================
+< - Complex dtypes in ``PchipInterpolator`` and ``Akima1DInterpolator`` have
+<   been deprecated and will raise an error in SciPy 1.15.0. If you are trying
+<   to use the real components of the passed array, use ``np.real`` on ``y``.
+< - Non-integer values of ``n`` together with ``exact=True`` are deprecated for
+<   `scipy.special.factorial`.
+---
+> -   Complex dtypes in `PchipInterpolator` and `Akima1DInterpolator` have
+>     been deprecated and will raise an error in SciPy 1.15.0. If you are trying
+>     to use the real components of the passed array, use `np.real` on `y`.
+> -   Non-integer values of `n` together with `exact=True` are deprecated for
+>     [`scipy.special.factorial`](../reference/generated/scipy.special.factorial.html#scipy.special.factorial).
+141,142c126,127
+< Expired Deprecations
+< ================
+---
+> ## Expired Deprecations
+> 
+145,160d129
+< - ``scipy.signal.{lsim2,impulse2,step2}`` have been removed in favour of
+<   ``scipy.signal.{lsim,impulse,step}``.
+< - Window functions can no longer be imported from the `scipy.signal` namespace and
+<   instead should be accessed through either `scipy.signal.windows` or
+<   `scipy.signal.get_window`.
+< - `scipy.sparse` no longer supports multi-Ellipsis indexing
+< - ``scipy.signal.{bspline,quadratic,cubic}`` have been removed in favour of alternatives
+<   in `scipy.interpolate`.
+< - ``scipy.linalg.tri{,u,l}`` have been removed in favour of ``numpy.tri{,u,l}``.
+< - Non-integer arrays in `scipy.special.factorial` with ``exact=True`` now raise an
+<   error.
+< - Functions from NumPy's main namespace which were exposed in SciPy's main
+<   namespace, such as ``numpy.histogram`` exposed by ``scipy.histogram``, have
+<   been removed from SciPy's main namespace. Please use the functions directly
+<   from ``numpy``. This was originally performed for SciPy 1.12.0 however was missed from
+<   the release notes so is included here for completeness.
+161a131,146
+> -   `scipy.signal.{lsim2,impulse2,step2}` have been removed in favour of
+>     `scipy.signal.{lsim,impulse,step}`.
+> -   Window functions can no longer be imported from the [`scipy.signal`](../reference/signal.html#module-scipy.signal) namespace and
+>     instead should be accessed through either [`scipy.signal.windows`](../reference/signal.windows.html#module-scipy.signal.windows) or
+>     [`scipy.signal.get_window`](../reference/generated/scipy.signal.get_window.html#scipy.signal.get_window).
+> -   [`scipy.sparse`](../reference/sparse.html#module-scipy.sparse) no longer supports multi-Ellipsis indexing
+> -   `scipy.signal.{bspline,quadratic,cubic}` have been removed in favour of alternatives
+>     in [`scipy.interpolate`](../reference/interpolate.html#module-scipy.interpolate).
+> -   `scipy.linalg.tri{,u,l}` have been removed in favour of `numpy.tri{,u,l}`.
+> -   Non-integer arrays in [`scipy.special.factorial`](../reference/generated/scipy.special.factorial.html#scipy.special.factorial) with `exact=True` now raise an
+>     error.
+> -   Functions from NumPy's main namespace which were exposed in SciPy's main
+>     namespace, such as `numpy.histogram` exposed by `scipy.histogram`, have
+>     been removed from SciPy's main namespace. Please use the functions directly
+>     from `numpy`. This was originally performed for SciPy 1.12.0 however was missed from
+>     the release notes so is included here for completeness.
+162a148
+> ## Backwards incompatible changes
+164,165c150
+< Backwards incompatible changes
+< =========================
+---
+> ## Other changes
+166a152,153
+> -   The second argument of [`scipy.stats.moment`](../reference/generated/scipy.stats.moment.html#scipy.stats.moment) has been renamed to `order`
+>     while maintaining backward compatibility.
+168,171c155
+< Other changes
+< ===========
+< - The second argument of `scipy.stats.moment` has been renamed to ``order``
+<   while maintaining backward compatibility.
+---
+> ## Authors
+172a157,253
+> -   Name (commits)
+> -   h-vetinari (50)
+> -   acceptacross (1) +
+> -   Petteri Aimonen (1) +
+> -   Francis Allanah (2) +
+> -   Jonas Kock am Brink (1) +
+> -   anupriyakkumari (12) +
+> -   Aman Atman (2) +
+> -   Aaditya Bansal (1) +
+> -   Christoph Baumgarten (2)
+> -   Sebastian Berg (4)
+> -   Nicolas Bloyet (2) +
+> -   Matt Borland (1)
+> -   Jonas Bosse (1) +
+> -   Jake Bowhay (25)
+> -   Matthew Brett (1)
+> -   Dietrich Brunn (7)
+> -   Evgeni Burovski (65)
+> -   Matthias Bussonnier (4)
+> -   Tim Butters (1) +
+> -   Cale (1) +
+> -   CJ Carey (5)
+> -   Thomas A Caswell (1)
+> -   Sean Cheah (44) +
+> -   Lucas Colley (97)
+> -   com3dian (1)
+> -   Gianluca Detommaso (1) +
+> -   Thomas Duvernay (1)
+> -   DWesl (2)
+> -   f380cedric (1) +
+> -   fancidev (13) +
+> -   Daniel Garcia (1) +
+> -   Lukas Geiger (3)
+> -   Ralf Gommers (147)
+> -   Matt Haberland (81)
+> -   Tessa van der Heiden (2) +
+> -   Shawn Hsu (1) +
+> -   inky (3) +
+> -   Jannes Münchmeyer (2) +
+> -   Aditya Vidyadhar Kamath (2) +
+> -   Agriya Khetarpal (1) +
+> -   Andrew Landau (1) +
+> -   Eric Larson (7)
+> -   Zhen-Qi Liu (1) +
+> -   Christian Lorentzen (2)
+> -   Adam Lugowski (4)
+> -   m-maggi (6) +
+> -   Chethin Manage (1) +
+> -   Ben Mares (1)
+> -   Chris Markiewicz (1) +
+> -   Mateusz Sokół (3)
+> -   Daniel McCloy (1) +
+> -   Melissa Weber Mendonça (6)
+> -   Josue Melka (1)
+> -   Michał Górny (4)
+> -   Juan Montesinos (1) +
+> -   Juan F. Montesinos (1) +
+> -   Takumasa Nakamura (1)
+> -   Andrew Nelson (27)
+> -   Praveer Nidamaluri (1)
+> -   Yagiz Olmez (5) +
+> -   Dimitri Papadopoulos Orfanos (1)
+> -   Drew Parsons (1) +
+> -   Tirth Patel (7)
+> -   Pearu Peterson (1)
+> -   Matti Picus (3)
+> -   Rambaud Pierrick (1) +
+> -   Ilhan Polat (30)
+> -   Quentin Barthélemy (1)
+> -   Tyler Reddy (117)
+> -   Pamphile Roy (10)
+> -   Atsushi Sakai (8)
+> -   Daniel Schmitz (10)
+> -   Dan Schult (17)
+> -   Eli Schwartz (4)
+> -   Stefanie Senger (1) +
+> -   Scott Shambaugh (2)
+> -   Kevin Sheppard (2)
+> -   sidsrinivasan (4) +
+> -   Samuel St-Jean (1)
+> -   Albert Steppi (31)
+> -   Adam J. Stewart (4)
+> -   Kai Striega (3)
+> -   Ruikang Sun (1) +
+> -   Mike Taves (1)
+> -   Nicolas Tessore (3)
+> -   Benedict T Thekkel (1) +
+> -   Will Tirone (4)
+> -   Jacob Vanderplas (2)
+> -   Christian Veenhuis (1)
+> -   Isaac Virshup (2)
+> -   Ben Wallace (1) +
+> -   Xuefeng Xu (3)
+> -   Xiao Yuan (5)
+> -   Irwin Zaid (8)
+> -   Elmar Zander (1) +
+> -   Mathias Zechmeister (1) +
+174,276d254
+< 
+< 
+< Authors
+< ======
+< 
+< * Name (commits)
+< * h-vetinari (50)
+< * acceptacross (1) +
+< * Petteri Aimonen (1) +
+< * Francis Allanah (2) +
+< * Jonas Kock am Brink (1) +
+< * anupriyakkumari (12) +
+< * Aman Atman (2) +
+< * Aaditya Bansal (1) +
+< * Christoph Baumgarten (2)
+< * Sebastian Berg (4)
+< * Nicolas Bloyet (2) +
+< * Matt Borland (1)
+< * Jonas Bosse (1) +
+< * Jake Bowhay (25)
+< * Matthew Brett (1)
+< * Dietrich Brunn (7)
+< * Evgeni Burovski (65)
+< * Matthias Bussonnier (4)
+< * Tim Butters (1) +
+< * Cale (1) +
+< * CJ Carey (5)
+< * Thomas A Caswell (1)
+< * Sean Cheah (44) +
+< * Lucas Colley (97)
+< * com3dian (1)
+< * Gianluca Detommaso (1) +
+< * Thomas Duvernay (1)
+< * DWesl (2)
+< * f380cedric (1) +
+< * fancidev (13) +
+< * Daniel Garcia (1) +
+< * Lukas Geiger (3)
+< * Ralf Gommers (147)
+< * Matt Haberland (81)
+< * Tessa van der Heiden (2) +
+< * Shawn Hsu (1) +
+< * inky (3) +
+< * Jannes Münchmeyer (2) +
+< * Aditya Vidyadhar Kamath (2) +
+< * Agriya Khetarpal (1) +
+< * Andrew Landau (1) +
+< * Eric Larson (7)
+< * Zhen-Qi Liu (1) +
+< * Christian Lorentzen (2)
+< * Adam Lugowski (4)
+< * m-maggi (6) +
+< * Chethin Manage (1) +
+< * Ben Mares (1)
+< * Chris Markiewicz (1) +
+< * Mateusz Sokół (3)
+< * Daniel McCloy (1) +
+< * Melissa Weber Mendonça (6)
+< * Josue Melka (1)
+< * Michał Górny (4)
+< * Juan Montesinos (1) +
+< * Juan F. Montesinos (1) +
+< * Takumasa Nakamura (1)
+< * Andrew Nelson (27)
+< * Praveer Nidamaluri (1)
+< * Yagiz Olmez (5) +
+< * Dimitri Papadopoulos Orfanos (1)
+< * Drew Parsons (1) +
+< * Tirth Patel (7)
+< * Pearu Peterson (1)
+< * Matti Picus (3)
+< * Rambaud Pierrick (1) +
+< * Ilhan Polat (30)
+< * Quentin Barthélemy (1)
+< * Tyler Reddy (117)
+< * Pamphile Roy (10)
+< * Atsushi Sakai (8)
+< * Daniel Schmitz (10)
+< * Dan Schult (17)
+< * Eli Schwartz (4)
+< * Stefanie Senger (1) +
+< * Scott Shambaugh (2)
+< * Kevin Sheppard (2)
+< * sidsrinivasan (4) +
+< * Samuel St-Jean (1)
+< * Albert Steppi (31)
+< * Adam J. Stewart (4)
+< * Kai Striega (3)
+< * Ruikang Sun (1) +
+< * Mike Taves (1)
+< * Nicolas Tessore (3)
+< * Benedict T Thekkel (1) +
+< * Will Tirone (4)
+< * Jacob Vanderplas (2)
+< * Christian Veenhuis (1)
+< * Isaac Virshup (2)
+< * Ben Wallace (1) +
+< * Xuefeng Xu (3)
+< * Xiao Yuan (5)
+< * Irwin Zaid (8)
+< * Elmar Zander (1) +
+< * Mathias Zechmeister (1) +
+< 
+279c257,258
+< This list of names is automatically generated, and may not be fully complete.
+\ No newline at end of file
+---
+> This list of names is automatically generated, and may not be fully complete.
+> 
