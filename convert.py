@@ -143,15 +143,23 @@ def drop_prs_and_issues(text):
     return text
 
 
+def reflow_text(text):
+    text = re.sub(r"(\S)\n *([^-*\s])", "\\1 \\2", text)
+    return text
+
+
 def run_pipeline(input_file, output_file):
     with open(input_file, "rt") as f:
         html = f.read()
     html = bs4_simplify_html(html)
     text = run_pandoc(html)
 
+    text = drop_prs_and_issues(text)
+    text = reflow_text(text)
+
     # Convert to CRLF to match existing release notes
     text = text.replace("\n", "\r\n")
-    text = drop_prs_and_issues(text)
+
     with open(output_file, "wt") as f:
         f.write(text)
 

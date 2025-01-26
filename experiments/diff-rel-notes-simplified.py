@@ -179,15 +179,21 @@ def drop_prs_and_issues(text):
     return text
 
 
+def reflow_text(text):
+    text = re.sub(r"(\S)\n *([^-*\s])", "\\1 \\2", text)
+    return text
+
+
 def run_pipeline(tag_name):
     with open(f"sphinx_output/{tag_name.replace('v', '')}-notes.html", "rt") as f:
         html = f.read()
     html = bs4_simplify_html(html)
     text = run_pandoc(html)
 
+    text = drop_prs_and_issues(text)
+    text = reflow_text(text)
     # Convert to CRLF to match existing release notes
     text = text.replace("\n", "\r\n")
-    text = drop_prs_and_issues(text)
     with open(f"output/{tag_name}-notes.md", "wt") as f:
         f.write(text)
 
