@@ -114,8 +114,9 @@ def bs4_simplify_html(html):
     return str(soup)
 
 
-def run_pandoc(html):
+def run_pandoc(html, rewrap_text=True):
     # Make sure files have right extension, so that Pandoc can autodetect the type
+    wrap_setting = "--wrap=none" if rewrap_text else "--wrap=preserve"
     with tempfile.NamedTemporaryFile(suffix='.html', mode='wt') as htmlfile:
         with tempfile.NamedTemporaryFile(suffix='.md', mode='rt') as mdfile:
             htmlfile.write(html)
@@ -123,7 +124,7 @@ def run_pandoc(html):
                 [
                     "pandoc",
                     # Don't re-wrap text
-                    "--wrap=preserve",
+                    wrap_setting,
                     "-o",
                     mdfile.name,
                     htmlfile.name
@@ -143,19 +144,13 @@ def drop_prs_and_issues(text):
     return text
 
 
-def reflow_text(text):
-    text = re.sub(r"(\S)\n *([^-*\s])", "\\1 \\2", text)
-    return text
-
-
 def run_pipeline(input_file, output_file):
     with open(input_file, "rt") as f:
         html = f.read()
     html = bs4_simplify_html(html)
-    text = run_pandoc(html)
+    text = run_pandoc(html, rewrap_text=True)
 
     text = drop_prs_and_issues(text)
-    text = reflow_text(text)
 
     # Convert to CRLF to match existing release notes
     text = text.replace("\n", "\r\n")
